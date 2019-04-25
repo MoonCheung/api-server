@@ -1,12 +1,18 @@
 const Koa = require('koa')
+const app = new Koa()
+const onerror = require('koa-onerror')
+const cors = require('@koa/cors');
 //导入config配置
 const CONFIG = require('./config')
+//导入api接口
+const api = require('./routes/api')
 
-const app = new Koa()
+onerror(app);
 
-app.use(async ctx => {
-  ctx.body = 'Hello 运行koa应用程序成功啦！';
-});
+//CORS跨域请求配置
+app.use(cors());
+//router
+app.use(api.routes(), api.allowedMethods());
 
 if (!module.parent) {
   app.listen(CONFIG.port, console.log(`server is running at http://localhost:${CONFIG.port}`))
