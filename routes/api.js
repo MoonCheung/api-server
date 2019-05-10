@@ -7,8 +7,12 @@ const article = require('../controller/article')
 router.prefix('/api');
 // 控制面板信息接口
 router.post('/system', system.controller);
-// 登录接口
+// login接口
 router.post('/login', user.login);
+// 登录信息接口
+router.get('/info', user.info);
+// logout接口
+router.post('/logout', user.logout);
 // 添加文章接口
 router.post('/article/insfront', article.insertArticle);
 

@@ -11,7 +11,19 @@ let UserSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  roles: {
+    type: [String]
+  },
+  name: {
+    type: String
+  },
+  avatar: {
+    type: String
+  },
+  introduction: {
+    type: String
+  },
 })
 
 module.exports = DB.model('user', UserSchema)
