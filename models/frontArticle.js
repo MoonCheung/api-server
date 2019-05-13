@@ -6,7 +6,7 @@ let frontArticleSchema = new Schema({
   title: String,
   time: String,
   content: String,
-  des: String,
+  desc: String,
   list: String,
   banner: String,
   imgFileName: String,

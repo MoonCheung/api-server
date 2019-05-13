@@ -4,7 +4,7 @@ const fs = require('fs');
 /**
  * private API
  * 接收发布文章接口数据
- * @param {*} ctx
+ * @param {Object||null} ctx
  */
 async function insertArticle(ctx) {
   try {
@@ -13,7 +13,7 @@ async function insertArticle(ctx) {
       title,
       desc,
       htmlContent,
-      radio,
+      list,
       date,
     } = req;
     const front = await frontArticle.update({
@@ -23,20 +23,21 @@ async function insertArticle(ctx) {
         title,
         desc,
         content: htmlContent,
-        list: radio,
+        list,
         time: date
       }
     }, {
-      upsert: true //未找到任何文档，请插入新文档为true
+      //未找到任何文档，请插入新文档为true
+      upsert: true
     })
     ctx.body = {
       error: 0,
       success: front
     }
-  } catch (e) {
+  } catch (err) {
     ctx.body = {
       error: 1,
-      info: e
+      msg: err.message
     }
   }
 }

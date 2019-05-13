@@ -11,6 +11,15 @@ const CONFIG = require('./config')
 //导入api接口
 const api = require('./routes/api')
 
+//测试mongoose数据库插入是否成功
+// const category = require('./models/category')
+
+// console.log(new category({
+//   categoryname: '生活日记',
+//   categorydesc: '感想一些生活以及旅行',
+//   cdate: 1557567614068,
+// }))
+
 onerror(app);
 
 

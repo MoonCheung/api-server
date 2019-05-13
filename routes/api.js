@@ -2,6 +2,8 @@ const router = require('koa-router')();
 const user = require('../controller/user');
 const system = require('../controller/system');
 const article = require('../controller/article')
+const articleList = require('../controller/articleList')
+const category = require('../controller/category')
 
 /*添加router的前缀 */
 router.prefix('/api');
@@ -15,6 +17,15 @@ router.get('/info', user.info);
 router.post('/logout', user.logout);
 // 添加文章接口
 router.post('/article/insfront', article.insertArticle);
-
+// front文章列表接口
+router.get('/article/frontlist', articleList.frontList);
+// 添加分类接口
+router.post('/category/addcatg', category.addCategory);
+// 获取分类列表接口
+router.post('/category/getcatg', category.getCategory);
+// 编辑分类接口
+router.post('/category/editcatg', category.editCategory);
+// 删除分类接口
+router.post('/category/delcatg', category.delCategory);
 
 module.exports = router;
