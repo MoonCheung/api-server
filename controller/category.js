@@ -40,7 +40,7 @@ async function getCategory(ctx) {
     let data = ctx.request.body // curPage: 1, limit: 10
     let page = parseInt((data.curPage - 1) * data.limit)
     let pageSize = parseInt(data.limit);
-    let tagData = await categoryModel.aggregate([{
+    let catgData = await categoryModel.aggregate([{
       $project: {
         id: "$_id", //将_id映射成id
         categoryname: "$categoryname",
@@ -59,7 +59,7 @@ async function getCategory(ctx) {
     let total = await categoryModel.count({});
     ctx.body = {
       error: 0,
-      tagData,
+      catgData,
       total
     }
   } catch (err) {
@@ -105,6 +105,10 @@ async function editCategory(ctx) {
   }
 }
 
+/**
+ * 删除分类 API
+ * @param {Object} ctx 
+ */
 async function delCategory(ctx) {
   try {
     let {
