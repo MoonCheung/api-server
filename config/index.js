@@ -11,5 +11,11 @@ module.exports = {
     rolling: false,
     renew: false,
   },
-  mongodb: 'mongodb://127.0.0.1:27017/Blogs'
+  mongodb: 'mongodb://127.0.0.1:27017/Blogs',
+  // 七牛配置
+  QINIU: {
+    Bucket: 'blogs',
+    AccessKey: '3mY5Q8NhEo8ZHKg6z8crZdAPkimD3cxG3y4wwvif',
+    SecretKey: 'qytWalGJgnjQGyyFr80mD80uKCpMIugI4qK3zR2B'
+  }
 }

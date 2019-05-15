@@ -132,9 +132,35 @@ async function delTag(ctx) {
   }
 }
 
+/**
+ * 获取所有标签 API (排除标签描述)
+ * @param {Object} ctx
+ */
+async function getAllTag(ctx) {
+  try {
+    let result = await tagModel.find({}, {
+      tagdesc: 0,
+      __v: 0
+    })
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: '获取所有标签成功',
+      result
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: '获取所有标签失败',
+      err
+    }
+  }
+}
+
 module.exports = {
   addTag,
   getTag,
   editTag,
-  delTag
+  delTag,
+  getAllTag
 }

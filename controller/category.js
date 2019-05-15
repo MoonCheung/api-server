@@ -132,9 +132,35 @@ async function delCategory(ctx) {
   }
 }
 
+/**
+ * 获取所有分类 API (排除分类描述)
+ * @param {Object} ctx
+ */
+async function getAllCatg(ctx) {
+  try {
+    let result = await categoryModel.find({}, {
+      categorydesc: 0,
+      __v: 0
+    })
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: '获取所有分类成功',
+      result
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: '获取所有分类失败',
+      err
+    }
+  }
+}
+
 module.exports = {
   addCategory,
   getCategory,
   editCategory,
-  delCategory
+  delCategory,
+  getAllCatg
 }

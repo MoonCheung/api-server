@@ -4,7 +4,8 @@ const system = require('../controller/system');
 const article = require('../controller/article')
 const articleList = require('../controller/articleList')
 const category = require('../controller/category')
-const tags = require("../controller/tag")
+const tags = require('../controller/tag')
+const qiniu = require('../controller/qiniu')
 
 /*添加router的前缀 */
 router.prefix('/api');
@@ -36,5 +37,11 @@ router.post('/tag/gettag', tags.getTag);
 router.post('/tag/edittag', tags.editTag);
 // 删除标签接口
 router.post('/tag/deltag', tags.delTag);
+// 获取所有标签接口
+router.get('/tag/getalltag', tags.getAllTag);
+// 获取所有分类接口
+router.get('/category/getallcatg', category.getAllCatg);
+// 获取上传图片七牛云接口
+router.get('/getQNToken', qiniu.QNController.getQiniu);
 
 module.exports = router;
