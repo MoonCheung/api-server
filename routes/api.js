@@ -1,11 +1,10 @@
 const router = require('koa-router')();
 const user = require('../controller/user');
 const system = require('../controller/system');
-const article = require('../controller/article')
-const articleList = require('../controller/articleList')
-const category = require('../controller/category')
-const tags = require('../controller/tag')
-const qiniu = require('../controller/qiniu')
+const article = require('../controller/article');
+const category = require('../controller/category');
+const tags = require('../controller/tag');
+const qiniu = require('../controller/qiniu');
 
 /*添加router的前缀 */
 router.prefix('/api');
@@ -18,9 +17,13 @@ router.get('/info', user.info);
 // logout接口
 router.post('/logout', user.logout);
 // 添加文章接口
-router.post('/article/insfront', article.insertArticle);
-// front文章列表接口
-router.get('/article/frontlist', articleList.frontList);
+router.post('/article/insart', article.insertArticle);
+// 获取文章列表接口
+router.post('/article/artlist', article.articleList);
+// 编辑文章接口
+router.put('/article/editart', article.editArticle);
+// 获取文章详情接口
+router.post('/article/getartdetl', article.getArtDetl);
 // 添加分类接口
 router.post('/category/addcatg', category.addCategory);
 // 获取分类列表接口
