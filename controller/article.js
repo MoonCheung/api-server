@@ -89,8 +89,33 @@ async function articleList(ctx) {
  */
 async function editArticle(ctx) {
   try {
-    let data = ctx.request.body;
-    console.log(data);
+    let {
+      id,
+      title,
+      desc,
+      banner,
+      tag,
+      content,
+      catg,
+    } = ctx.request.body;
+    await article.updateOne({
+      _id: id
+    }, {
+      $set: {
+        title,
+        desc,
+        banner,
+        tag,
+        content,
+        catg,
+      }
+    }).then(() => {
+      ctx.body = {
+        code: 1,
+        error: 0,
+        msg: '编辑文章成功'
+      }
+    })
   } catch (err) {
     ctx.body = {
       error: 1,
@@ -106,8 +131,21 @@ async function editArticle(ctx) {
  */
 async function getArtDetl(ctx) {
   try {
-    let data = ctx.request.body;
-    console.log(data);
+    let {
+      id
+    } = ctx.request.body;
+    let ArtDetlData = await article.findOne({
+      _id: id,
+    }, {
+      __v: 0,
+      status: 0
+    })
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: '获取文章详情成功',
+      ArtDetlData
+    }
   } catch (err) {
     ctx.body = {
       error: 1,
@@ -117,10 +155,70 @@ async function getArtDetl(ctx) {
   }
 }
 
+/**
+ * 删除文章接口API
+ * @param {Object} ctx
+ */
+async function delArticle(ctx) {
+  try {
+    let {
+      id
+    } = ctx.request.body;
+    await article.deleteOne({
+      _id: id
+    }).then(() => {
+      ctx.body = {
+        code: 1,
+        error: 0,
+        msg: '删除文章成功'
+      }
+    })
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: '删除文章失败',
+      err
+    }
+  }
+}
+
+/**
+ * 改变文章状态接口API
+ * @param {Object} ctx
+ */
+async function chgArtStatus(ctx) {
+  try {
+    let {
+      id,
+      status
+    } = ctx.request.body;
+    await article.updateOne({
+      _id: id
+    }, {
+      $set: {
+        status
+      }
+    }).then(() => {
+      ctx.body = {
+        code: 1,
+        error: 0,
+        msg: '改变文章状态成功'
+      }
+    })
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: '改变文章状态失败',
+      err
+    }
+  }
+}
 
 module.exports = {
   insertArticle,
   articleList,
   editArticle,
-  getArtDetl
+  getArtDetl,
+  delArticle,
+  chgArtStatus
 }

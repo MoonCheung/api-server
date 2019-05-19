@@ -24,6 +24,10 @@ router.post('/article/artlist', article.articleList);
 router.put('/article/editart', article.editArticle);
 // 获取文章详情接口
 router.post('/article/getartdetl', article.getArtDetl);
+// 删除文章接口
+router.post('/article/delart', article.delArticle);
+// 改变文章状态接口
+router.post('/article/chgartsts', article.chgArtStatus);
 // 添加分类接口
 router.post('/category/addcatg', category.addCategory);
 // 获取分类列表接口
