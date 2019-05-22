@@ -49,6 +49,7 @@ async function articleList(ctx) {
     let artData = await article.aggregate([{
       $project: {
         id: "$_id", //将_id映射成id
+        uid: "$id",
         title: "$title",
         desc: "$desc",
         banner: "$banner",
@@ -65,7 +66,7 @@ async function articleList(ctx) {
         _id: 0
       }
     }]).skip(page).limit(pageSize).sort({
-      _id: -1
+      id: -1 //降序排列
     })
     let total = await article.count({});
     ctx.body = {

@@ -54,7 +54,7 @@ async function getCategory(ctx) {
         _id: 0
       }
     }]).skip(page).limit(pageSize).sort({
-      _id: -1
+      id: -1 //降序排列
     })
     let total = await categoryModel.count({});
     ctx.body = {

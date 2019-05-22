@@ -54,7 +54,7 @@ async function getTag(ctx) {
         _id: 0
       }
     }]).skip(page).limit(pageSize).sort({
-      _id: -1
+      id: -1
     })
     let total = await tagModel.count({});
     ctx.body = {
