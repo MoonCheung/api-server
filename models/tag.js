@@ -15,4 +15,4 @@ let tabSchema = new Schema({
   }
 })
 
-module.exports = DB.model('tab', tabSchema)
+module.exports = DB.model('tab', tabSchema) // 尴尬！准备上线之前tab改成为tag

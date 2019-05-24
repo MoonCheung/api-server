@@ -14,9 +14,6 @@ const os = require('os');
 
 async function controller(ctx, next) {
   let {
-    parseInt
-  } = Number;
-  let {
     freemem,
     cpus,
     hostname,
@@ -30,6 +27,8 @@ async function controller(ctx, next) {
   let num = parseInt(freemem() / 1024 / 1024);
   let percentage = parseInt((num / total) * 100);
   ctx.body = {
+    code: 1,
+    error: 0,
     constants: constants.SIGTRAP ? '1' : '0',
     release: release(),
     platform: platform(),

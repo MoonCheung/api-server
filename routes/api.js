@@ -9,7 +9,7 @@ const qiniu = require('../controller/qiniu');
 /*添加router的前缀 */
 router.prefix('/api');
 // 控制面板信息接口
-router.post('/system', system.controller);
+router.get('/system', system.controller);
 // login接口
 router.post('/login', user.login);
 // 登录信息接口
@@ -20,6 +20,8 @@ router.post('/logout', user.logout);
 router.post('/article/insart', article.insertArticle);
 // 获取文章列表接口
 router.post('/article/artlist', article.articleList);
+// 获取文章列表状态接口
+router.get('/article/artalllist', article.artAllList);
 // 编辑文章接口
 router.put('/article/editart', article.editArticle);
 // 获取文章详情接口
@@ -46,6 +48,8 @@ router.post('/tag/edittag', tags.editTag);
 router.post('/tag/deltag', tags.delTag);
 // 获取所有标签接口
 router.get('/tag/getalltag', tags.getAllTag);
+// 获取所有标签数量接口
+router.get('/tag/gettagtot', tags.getTagTotal);
 // 获取所有分类接口
 router.get('/category/getallcatg', category.getAllCatg);
 // 获取上传图片七牛云接口

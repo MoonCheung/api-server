@@ -157,10 +157,35 @@ async function getAllTag(ctx) {
   }
 }
 
+/**
+ * 获取所有标签数量 API
+ * @param {Object} ctx
+ */
+async function getTagTotal(ctx) {
+  try {
+    let tagTotalData = await tagModel.countDocuments({
+      status: '1'
+    })
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: '获取所有标签成功',
+      tagTotalData
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: '获取所有标签失败',
+      err
+    }
+  }
+}
+
 module.exports = {
   addTag,
   getTag,
   editTag,
   delTag,
-  getAllTag
+  getAllTag,
+  getTagTotal
 }
