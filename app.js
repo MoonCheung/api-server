@@ -1,11 +1,16 @@
 const Koa = require('koa')
-const app = new Koa()
 const onerror = require('koa-onerror')
 const cors = require('@koa/cors')
 const json = require('koa-json')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const session = require('koa-session')
+const jwt = require('koa-jwt');
+
+const app = new Koa()
+
+//导入白名单
+const whitelist = require('./routes/whitelist')
 //导入config配置
 const CONFIG = require('./config')
 //导入api接口
@@ -22,6 +27,23 @@ const api = require('./routes/api')
 
 onerror(app);
 
+// token错误处理
+app.use((ctx, next) => {
+  return next().catch((err) => {
+    if (err.status === 401) {
+      ctx.status = 401;
+      ctx.body = 'token已过期,请重新登陆';
+    } else {
+      throw err;
+    }
+  })
+})
+
+app.use(jwt({
+  secret: 'blogs_token'
+}).unless({
+  path: whitelist
+}));
 
 app.keys = ['some secret'];
 app.use(session({

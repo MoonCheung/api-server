@@ -1,3 +1,12 @@
+/*
+ * @Description: 文章模型
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-05-01 16:20:33
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:12:59
+ */
+
 const autoIncrement = require('mongoose-auto-increment');
 const mongoose = require('mongoose')
 const DB = require('./db')

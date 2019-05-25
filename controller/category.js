@@ -1,3 +1,12 @@
+/*
+ * @Description: 文章分类
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-05-12 15:32:33
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:10:23
+ */
+
 const categoryModel = require('../models/category')
 
 /**

@@ -1,13 +1,23 @@
+/*
+ * @Description: 用户信息
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-04-12 22:01:54
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:12:11
+ */
+
 const UserModel = require('../models/user')
+const config = require('../config')
+const jwt = require('jsonwebtoken')
 const md5 = require('./md5')
 
-async function login(ctx, next) {
+async function login(ctx) {
   try {
-    let req = ctx.request.body;
     let {
       username,
       password
-    } = req;
+    } = ctx.request.body;
     let pwd = md5(md5(password).substr(3, 8) + md5(password))
     let result = await UserModel.find({
       username
@@ -20,16 +30,24 @@ async function login(ctx, next) {
     } else {
       let [userInfo] = result;
       let {
+        _id,
         username,
         password
       } = userInfo
       if (password === pwd) {
-        ctx.session.username = username;
+        let name = ctx.session.username = username;
+        const token = jwt.sign({
+          name: name,
+          _id: _id
+        }, config.jwtToken.PrivateKey, {
+          expiresIn: '2h'
+        });
         ctx.body = {
+          code: 1,
           error: 0,
-          success: 1,
           username: ctx.session.username,
-          token: ctx.session.username
+          token: token,
+          msg: '登录成功'
         }
       } else {
         ctx.body = {
@@ -41,17 +59,17 @@ async function login(ctx, next) {
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: err.message
+      msg: '登陆失败,未经过token验证成功',
+      err
     }
   }
 }
 
 async function info(ctx) {
   try {
-    let req = ctx.request.query;
-    let name = req.token; //打印: admin
+    let data = ctx.state.user
     let getUser = await UserModel.find({
-      username: name
+      username: data.name
     })
     if (getUser.length === 0) {
       ctx.body = {
@@ -61,12 +79,13 @@ async function info(ctx) {
     } else {
       let [userInfo] = getUser
       ctx.body = {
+        code: 1,
+        error: 0,
+        msg: '响应服务器得到返回信息',
         name: userInfo.username,
         roles: userInfo.roles,
         avatar: userInfo.avatar,
-        introduction: userInfo.introduction,
-        success: 1,
-        msg: '响应服务器得到返回信息'
+        introduction: userInfo.introduction
       }
     }
   } catch (err) {
@@ -77,17 +96,16 @@ async function info(ctx) {
   }
 }
 
-async function logout(ctx, next) {
+async function logout(ctx) {
   try {
-    // TODO: 暂时处理bug,从浏览器Network里面报错error: 1
-    let req = ctx.request.body;
-    let name = req; // 打印: { admin: '' }
-    await UserModel.update({
-      username: name
+    let data = ctx.state.user;
+    await UserModel.findOne({
+      _id: data._id,
+      username: data.name
     })
     ctx.body = {
       error: 0,
-      msg: 'delete token!!!'
+      msg: '退出登录成功'
     }
   } catch (err) {
     ctx.body = {

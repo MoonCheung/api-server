@@ -1,3 +1,12 @@
+/*
+ * @Description: 七牛云上传配置
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-05-15 23:18:04
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:11:12
+ */
+
 const qiniu = require('qiniu')
 const CONFIG = require('../config/index')
 

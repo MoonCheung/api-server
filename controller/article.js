@@ -1,3 +1,12 @@
+/*
+ * @Description: 文章接口
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-04-15 10:21:15
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:09:16
+ */
+
 const article = require('../models/article');
 
 /**

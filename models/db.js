@@ -1,3 +1,12 @@
+/*
+ * @Description: mongoose模型
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-04-12 18:17:53
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:13:46
+ */
+
 const autoIncrement = require('mongoose-auto-increment');
 const mongoose = require('mongoose')
 const chalk = require('chalk')

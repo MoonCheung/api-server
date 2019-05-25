@@ -1,3 +1,12 @@
+/*
+ * @Description: node的os模块
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-04-22 16:45:08
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:11:33
+ */
+
 const os = require('os');
 
 /**

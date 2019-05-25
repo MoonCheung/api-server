@@ -1,3 +1,12 @@
+/*
+ * @Description: 路由API
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-04-12 16:51:06
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:14:49
+ */
+
 const router = require('koa-router')();
 const user = require('../controller/user');
 const system = require('../controller/system');

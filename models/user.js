@@ -1,3 +1,12 @@
+/*
+ * @Description: 用户模型
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-04-12 17:35:08
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:14:28
+ */
+
 const mongoose = require('mongoose')
 const DB = require('./db')
 const Schema = mongoose.Schema

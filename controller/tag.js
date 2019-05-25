@@ -1,3 +1,12 @@
+/*
+ * @Description: 文章标签
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-05-12 15:33:34
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:11:52
+ */
+
 const tagModel = require('../models/tag');
 
 /**

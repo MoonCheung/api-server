@@ -1,3 +1,12 @@
+/*
+ * @Description: MD5
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-05-02 22:41:11
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-26 00:10:50
+ */
+
 const crypto = require("crypto");
 
 /** 
