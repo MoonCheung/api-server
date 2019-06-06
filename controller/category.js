@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:32:33
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-05-30 21:41:56
+ * @LastEditTime: 2019-06-05 16:13:44
  */
 
 const categoryModel = require('../models/category');
@@ -175,10 +175,40 @@ async function getAllCatg(ctx) {
 	}
 }
 
+/**
+ * 获取所有分类 API (排除分类描述)
+ * @param {Object} ctx
+ */
+async function getAllCatgApplet(ctx) {
+	try {
+		let result = await categoryModel.find(
+			{},
+			{
+				_id: 0,
+				categorydesc: 0,
+				__v: 0,
+			}
+		);
+		ctx.body = {
+			code: 1,
+			error: 0,
+			msg: '获取所有分类成功',
+			result,
+		};
+	} catch (err) {
+		ctx.body = {
+			error: 1,
+			msg: '获取所有分类失败',
+			err,
+		};
+	}
+}
+
 module.exports = {
 	addCategory,
 	getCategory,
 	editCategory,
 	delCategory,
 	getAllCatg,
+	getAllCatgApplet,
 };

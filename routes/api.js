@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:51:06
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-01 00:23:30
+ * @LastEditTime: 2019-06-05 21:26:31
  */
 
 const router = require('koa-router')();
@@ -66,8 +66,12 @@ router.get('/getQNToken', qiniu.QNController.getQiniu);
 
 /** *** 小程序相关API *****/
 // 获取文章列表API
-router.post('/getallart', article.getallAtrApplet);
+router.post('/art/getallart', article.getallAtrApplet);
 // 获取文章详情API
 router.get('/getartdeil/:id', article.getArtDeilApplet);
+// 获取分类列表API
+router.get('/catg/catglist', category.getAllCatgApplet);
+// 获取指定分类列表API
+router.post('/art/apptcatg', article.getApptCatgApplet);
 
 module.exports = router;

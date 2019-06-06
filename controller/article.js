@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-02 00:47:12
+ * @LastEditTime: 2019-06-06 23:15:00
  */
 
 const article = require('../models/article');
@@ -325,18 +325,22 @@ async function getallAtrApplet(ctx) {
 		ctx.body = {
 			code: 1,
 			error: 0,
-			msg: '获取文章列表成功',
+			msg: '获取所有文章列表成功',
 			artList,
 		};
 	} catch (err) {
 		ctx.body = {
 			error: 1,
-			msg: '获取文章列表失败',
+			msg: '获取所有文章列表失败',
 			err,
 		};
 	}
 }
 
+/**
+ * 指定ID文章详情接口API
+ * @param {Object} ctx
+ */
 async function getArtDeilApplet(ctx) {
 	try {
 		let data = ctx.request.query;
@@ -367,6 +371,70 @@ async function getArtDeilApplet(ctx) {
 	}
 }
 
+/**
+ * 指定分类文章接口API
+ * @param {Object} ctx
+ */
+async function getApptCatgApplet(ctx) {
+	try {
+		let data = ctx.request.body;
+		let page = parseInt(data.curPage * 5);
+		let apptArtList = await article.aggregate([
+			{
+				$match: {
+					status: 1,
+					catg: data.catg,
+				},
+			},
+			{
+				$project: {
+					id: '$id',
+					title: '$title',
+					desc: '$desc',
+					catg: '$catg',
+					cdate: {
+						$dateToString: {
+							format: '%Y年%m月%d日',
+							date: '$cdate',
+						},
+					},
+					_id: 0,
+				},
+			},
+			{
+				$lookup: {
+					from: 'users',
+					pipeline: [{ $match: { name: 'MoonCheung' } }, { $project: { _id: 0, introduction: 0, username: 0, password: 0, roles: 0 } }],
+					as: 'apptAuthor',
+				},
+			},
+			//$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
+			{ $unwind: '$apptAuthor' },
+			{ $skip: page },
+			{
+				$limit: 5,
+			},
+			{
+				$sort: {
+					id: -1, //降序排列
+				},
+			},
+		]);
+		ctx.body = {
+			code: 1,
+			error: 0,
+			msg: '获取指定分类文章成功',
+			apptArtList,
+		};
+	} catch (err) {
+		ctx.body = {
+			error: 1,
+			msg: '获取指定分类文章失败',
+			err,
+		};
+	}
+}
+
 module.exports = {
 	insertArticle,
 	articleList,
@@ -377,4 +445,5 @@ module.exports = {
 	artAllList,
 	getallAtrApplet,
 	getArtDeilApplet,
+	getApptCatgApplet,
 };
