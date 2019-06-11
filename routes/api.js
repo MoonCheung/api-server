@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:51:06
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-05 21:26:31
+ * @LastEditTime: 2019-06-10 21:40:24
  */
 
 const router = require('koa-router')();
@@ -73,5 +73,9 @@ router.get('/getartdeil/:id', article.getArtDeilApplet);
 router.get('/catg/catglist', category.getAllCatgApplet);
 // 获取指定分类列表API
 router.post('/art/apptcatg', article.getApptCatgApplet);
+// 增加点赞文章API
+router.post('/art/addlike', article.addLikeArtApplet);
+// 删除点赞文章API
+router.post('/art/dellike', article.delLikeArtApplet);
 
 module.exports = router;

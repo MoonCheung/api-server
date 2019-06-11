@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-06 23:15:00
+ * @LastEditTime: 2019-06-10 22:58:10
  */
 
 const article = require('../models/article');
@@ -281,7 +281,7 @@ async function artAllList(ctx) {
 async function getallAtrApplet(ctx) {
 	try {
 		let data = ctx.request.body;
-		let page = parseInt(data.curPage * 5);
+		let page = parseInt(data.allPage * 5);
 		let artList = await article.aggregate([
 			{
 				$match: {
@@ -294,6 +294,7 @@ async function getallAtrApplet(ctx) {
 					title: '$title',
 					desc: '$desc',
 					catg: '$catg',
+					pv: '$pv',
 					cdate: {
 						$dateToString: {
 							format: '%Y年%m月%d日',
@@ -344,16 +345,23 @@ async function getallAtrApplet(ctx) {
 async function getArtDeilApplet(ctx) {
 	try {
 		let data = ctx.request.query;
-		let ArtDeilData = await article.findOne(
+		let ArtDeilData = await article.findOneAndUpdate(
 			{
 				id: data.id,
 			},
 			{
-				__v: 0,
-				_id: 0,
-				desc: 0,
-				banner: 0,
-				status: 0,
+				//$inc运算符按指定值递增
+				$inc: { pv: 1 },
+			},
+			{
+				projection: {
+					__v: 0,
+					_id: 0,
+					desc: 0,
+					banner: 0,
+					status: 0,
+				},
+				returnNewDocument: true,
 			}
 		);
 		ctx.body = {
@@ -392,6 +400,7 @@ async function getApptCatgApplet(ctx) {
 					title: '$title',
 					desc: '$desc',
 					catg: '$catg',
+					pv: '$pv',
 					cdate: {
 						$dateToString: {
 							format: '%Y年%m月%d日',
@@ -435,6 +444,56 @@ async function getApptCatgApplet(ctx) {
 	}
 }
 
+async function addLikeArtApplet(ctx) {
+	try {
+		let data = ctx.request.body;
+		await article.updateOne(
+			{
+				id: data.id,
+			},
+			{
+				$set: { like: data.like },
+			}
+		);
+		ctx.body = {
+			code: 1,
+			error: 0,
+			msg: '增加指定文章点赞成功',
+		};
+	} catch (err) {
+		ctx.body = {
+			error: 1,
+			msg: '增加指定文章点赞失败',
+			err,
+		};
+	}
+}
+
+async function delLikeArtApplet(ctx) {
+	try {
+		let data = ctx.request.body;
+		await article.updateOne(
+			{
+				id: data.id,
+			},
+			{
+				$set: { like: data.like },
+			}
+		);
+		ctx.body = {
+			code: 1,
+			error: 0,
+			msg: '删除指定文章点赞成功',
+		};
+	} catch (err) {
+		ctx.body = {
+			error: 1,
+			msg: '删除指定文章点赞失败',
+			err,
+		};
+	}
+}
+
 module.exports = {
 	insertArticle,
 	articleList,
@@ -446,4 +505,6 @@ module.exports = {
 	getallAtrApplet,
 	getArtDeilApplet,
 	getApptCatgApplet,
+	addLikeArtApplet,
+	delLikeArtApplet,
 };

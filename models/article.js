@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-01 16:20:33
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-05-30 22:46:34
+ * @LastEditTime: 2019-06-10 11:52:36
  */
 
 const autoIncrement = require('mongoose-auto-increment');
@@ -29,6 +29,16 @@ let ArticleSchema = new Schema({
     },
     content: String,
     catg: String,
+    // 访问数
+    pv: {
+        type: Number,
+        default: 0,
+    },
+    // 点赞数
+    like: {
+        type: Number,
+        default: 0,
+    },
     cdate: {
         type: Date,
         default: Date.now,
