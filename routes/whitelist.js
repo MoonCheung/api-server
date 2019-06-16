@@ -4,8 +4,8 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-25 23:17:40
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-10 22:09:57
+ * @LastEditTime: 2019-06-11 17:50:43
  */
 
-const whitelist = [/login/, /getallart/, /getartdeil/, /catglist/, /apptcatg/, /addlike/, /dellike/];
+const whitelist = [/login/, /getallart/, /getartdeil/, /catglist/, /apptcatg/, /chglike/];
 module.exports = whitelist;

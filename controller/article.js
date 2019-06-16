@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-10 22:58:10
+ * @LastEditTime: 2019-06-16 15:41:01
  */
 
 const article = require('../models/article');
@@ -361,7 +361,8 @@ async function getArtDeilApplet(ctx) {
 					banner: 0,
 					status: 0,
 				},
-				returnNewDocument: true,
+				new: true,
+				upsert: true,
 			}
 		);
 		ctx.body = {
@@ -444,51 +445,48 @@ async function getApptCatgApplet(ctx) {
 	}
 }
 
-async function addLikeArtApplet(ctx) {
+/**
+ * 改变指定分类文章点赞状态接口API
+ * @param {Object} ctx
+ */
+async function chgLikeArtApplet(ctx) {
 	try {
 		let data = ctx.request.body;
-		await article.updateOne(
+		let result = await article.findOneAndUpdate(
 			{
 				id: data.id,
 			},
 			{
 				$set: { like: data.like },
-			}
-		);
-		ctx.body = {
-			code: 1,
-			error: 0,
-			msg: '增加指定文章点赞成功',
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '增加指定文章点赞失败',
-			err,
-		};
-	}
-}
-
-async function delLikeArtApplet(ctx) {
-	try {
-		let data = ctx.request.body;
-		await article.updateOne(
-			{
-				id: data.id,
 			},
 			{
-				$set: { like: data.like },
+				projection: {
+					__v: 0,
+					_id: 0,
+					pv: 0,
+					tag: 0,
+					title: 0,
+					catg: 0,
+					desc: 0,
+					content: 0,
+					banner: 0,
+					cdate: 0,
+					status: 0,
+				},
+				new: true,
+				upsert: true,
 			}
 		);
 		ctx.body = {
 			code: 1,
 			error: 0,
-			msg: '删除指定文章点赞成功',
+			msg: '改变指定文章点赞成功',
+			result,
 		};
 	} catch (err) {
 		ctx.body = {
 			error: 1,
-			msg: '删除指定文章点赞失败',
+			msg: '改变指定文章点赞失败',
 			err,
 		};
 	}
@@ -505,6 +503,5 @@ module.exports = {
 	getallAtrApplet,
 	getArtDeilApplet,
 	getApptCatgApplet,
-	addLikeArtApplet,
-	delLikeArtApplet,
+	chgLikeArtApplet,
 };

@@ -1,5 +1,6 @@
 # 人工配置
-node_modules
+node_modules/
+package-lock.json
 
 # Log files
 npm-debug.log*
