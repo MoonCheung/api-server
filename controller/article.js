@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-16 15:41:01
+ * @LastEditTime: 2019-06-16 18:06:53
  */
 
 const article = require('../models/article');
@@ -274,6 +274,40 @@ async function artAllList(ctx) {
 	}
 }
 
+async function getPvTotal(ctx) {
+	try {
+		let result = await article.aggregate([
+			{
+				$match: {
+					status: 1,
+				},
+			},
+			{
+				$group: {
+					_id: null,
+					pv_count: {
+						$sum: '$pv',
+					},
+				},
+			},
+		]);
+		ctx.body = {
+			code: 1,
+			error: 0,
+			msg: '获取页面浏览量成功',
+			result,
+		};
+	} catch (err) {
+		ctx.body = {
+			error: 1,
+			msg: '获取页面浏览量失败',
+			err,
+		};
+	}
+}
+
+/*******************************小程序相关API*******************************/
+
 /**
  * 指定状态和limit文章列表接口API
  * @param {Object} ctx
@@ -500,6 +534,7 @@ module.exports = {
 	delArticle,
 	chgArtStatus,
 	artAllList,
+	getPvTotal,
 	getallAtrApplet,
 	getArtDeilApplet,
 	getApptCatgApplet,

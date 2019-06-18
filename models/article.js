@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-01 16:20:33
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-10 11:52:36
+ * @LastEditTime: 2019-06-17 15:01:05
  */
 
 const autoIncrement = require('mongoose-auto-increment');
@@ -47,11 +47,6 @@ let ArticleSchema = new Schema({
         type: Number,
         default: 1,
     },
-    // 暂时删除
-    // author: {
-    //     type: String,
-    //     default: 'MoonCheung',
-    // },
 });
 
 ArticleSchema.plugin(autoIncrement.plugin, {

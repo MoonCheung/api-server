@@ -4,18 +4,19 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 22:01:54
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-05-28 22:39:27
+ * @LastEditTime: 2019-06-18 16:24:10
  */
 
 const UserModel = require('../models/user');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
-const md5 = require('./md5');
+const md5 = require('md5');
+// const md5 = require('./md5');
 
 async function login(ctx) {
 	try {
 		let { username, password } = ctx.request.body;
-		let pwd = md5(md5(password).substr(3, 8) + md5(password));
+		// let pwd = md5(md5(password).substr(3, 8) + md5(password));
 		let result = await UserModel.find({
 			username,
 		});
@@ -26,20 +27,20 @@ async function login(ctx) {
 			};
 		} else {
 			let [userInfo] = result;
-			let { _id, username, password } = userInfo;
-			if (password === pwd) {
-				let name = (ctx.session.username = username);
+			//TODO:md5(md5(密码))
+			if (Object.is(userInfo.password, md5(password))) {
+				let name = (ctx.session.username = userInfo.username);
 				const token = jwt.sign(
 					{
 						name: name,
-						_id: _id,
+						_id: userInfo._id,
 					},
 					config.jwtToken.PrivateKey,
 					{
 						expiresIn: '2h',
 					}
 				);
-				console.log(token);
+				// console.log(token); //打印出token
 				ctx.body = {
 					code: 1,
 					error: 0,
@@ -80,10 +81,11 @@ async function info(ctx) {
 				code: 1,
 				error: 0,
 				msg: '响应服务器得到返回信息',
+				id: userInfo._id,
 				name: userInfo.username,
 				roles: userInfo.roles,
 				avatar: userInfo.avatar,
-				introduction: userInfo.introduction,
+				intro: userInfo.intro,
 			};
 		}
 	} catch (err) {
@@ -113,8 +115,63 @@ async function logout(ctx) {
 	}
 }
 
+async function updateInfo(ctx) {
+	try {
+		let data = ctx.request.body;
+		let userInfo = await UserModel.findById({
+			_id: data.id,
+		});
+		if (Object.is(userInfo.password, md5(data.oldPwd))) {
+			let result = await UserModel.findOneAndUpdate(
+				{
+					_id: data.id,
+				},
+				{
+					$set: {
+						name: data.nickname,
+						password: md5(data.newPwd), //TODO:md5(md5(密码))
+						intro: data.intro,
+						email: data.email,
+						avatar: data.avatar,
+					},
+				},
+				{
+					projection: {
+						__v: 0,
+						_id: 0,
+						password: 0,
+						intro: 0,
+						email: 0,
+					},
+					new: true,
+					upsert: true,
+				}
+			);
+			ctx.body = {
+				code: 1,
+				error: 0,
+				msg: '更新用户信息成功',
+				result,
+			};
+		} else {
+			ctx.body = {
+				error: 1,
+				msg: '输入密码不对，更新出错',
+				result: '',
+			};
+		}
+	} catch (err) {
+		ctx.body = {
+			error: 1,
+			msg: '更新用户信息失败',
+			err,
+		};
+	}
+}
+
 module.exports = {
 	login,
 	info,
 	logout,
+	updateInfo,
 };

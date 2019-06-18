@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:51:06
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-11 17:53:11
+ * @LastEditTime: 2019-06-18 17:52:35
  */
 
 const router = require('koa-router')();
@@ -22,7 +22,9 @@ router.get('/system', system.controller);
 // login接口
 router.post('/login', user.login);
 // 登录信息接口
-router.get('/info', user.info);
+router.post('/info', user.info);
+// 更新用户信息接口
+router.patch('/upduser', user.updateInfo);
 // logout接口
 router.post('/logout', user.logout);
 // 添加文章接口
@@ -63,6 +65,8 @@ router.get('/tag/gettagtot', tags.getTagTotal);
 router.get('/category/getallcatg', category.getAllCatg);
 // 获取上传图片七牛云接口
 router.get('/getQNToken', qiniu.QNController.getQiniu);
+// 获取页面浏览数接口
+router.get('/art/getpvtot', article.getPvTotal);
 
 /** *** 小程序相关API *****/
 // 获取文章列表API
