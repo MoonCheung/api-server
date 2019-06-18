@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 22:01:54
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-18 16:24:10
+ * @LastEditTime: 2019-06-18 23:26:16
  */
 
 const UserModel = require('../models/user');
@@ -32,12 +32,14 @@ async function login(ctx) {
 				let name = (ctx.session.username = userInfo.username);
 				const token = jwt.sign(
 					{
-						name: name,
-						_id: userInfo._id,
+						data: {
+							name: name,
+							_id: userInfo._id,
+						},
 					},
 					config.jwtToken.PrivateKey,
 					{
-						expiresIn: '2h',
+						expiresIn: '2h', //2个小时到期
 					}
 				);
 				// console.log(token); //打印出token
@@ -66,9 +68,9 @@ async function login(ctx) {
 
 async function info(ctx) {
 	try {
-		let data = ctx.state.user;
+		let infoData = ctx.state.user;
 		let getUser = await UserModel.find({
-			username: data.name,
+			username: infoData.data.name,
 		});
 		if (getUser.length === 0) {
 			ctx.body = {
