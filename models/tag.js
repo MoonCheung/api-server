@@ -4,24 +4,39 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 14:58:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-05-26 00:14:11
+ * @LastEditTime: 2019-06-20 00:11:27
  */
+const autoIncrement = require('mongoose-auto-increment');
+const mongoose = require('mongoose');
+const DB = require('./db');
+const Schema = mongoose.Schema;
 
-const mongoose = require('mongoose')
-const DB = require('./db')
-const Schema = mongoose.Schema
+let CountersSchema = new Schema({
+    name: String,
+});
 
 let tabSchema = new Schema({
-  tagname: String,
-  tagdesc: String,
-  cdate: {
-    type: Date,
-    default: Date.now
-  },
-  status: {
-    type: Number,
-    default: 1
-  }
-})
+    id: {
+        type: Number,
+        ref: 'id',
+    },
+    tagname: String,
+    tagdesc: String,
+    cdate: {
+        type: Date,
+        default: Date.now,
+    },
+    status: {
+        type: Number,
+        default: 1,
+    },
+});
 
-module.exports = DB.model('tab', tabSchema) // 尴尬！准备上线之前tab改成为tag
+tabSchema.plugin(autoIncrement.plugin, {
+    model: 'tag',
+    field: 'id',
+    startAt: 1,
+    incrementBy: 1,
+});
+CountersSchema.plugin(autoIncrement.plugin, 'id');
+module.exports = DB.model('tag', tabSchema);

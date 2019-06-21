@@ -4,19 +4,17 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 22:01:54
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-18 23:32:58
+ * @LastEditTime: 2019-06-18 23:33:53
  */
 
 const UserModel = require('../models/user');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const md5 = require('md5');
-// const md5 = require('./md5');
 
 async function login(ctx) {
 	try {
 		let { username, password } = ctx.request.body;
-		// let pwd = md5(md5(password).substr(3, 8) + md5(password));
 		let result = await UserModel.find({
 			username,
 		});
