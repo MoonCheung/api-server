@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-19 23:32:11
+ * @LastEditTime: 2019-06-22 20:56:08
  */
 
 module.exports = {
@@ -31,5 +31,20 @@ module.exports = {
     // jwtToken
     jwtToken: {
         PrivateKey: 'blogs_token',
+    },
+    // node服务器信息
+    INFO: {
+        status: 'success',
+        msg: '数据请求成功!',
+        result: {
+            name: 'node-server',
+            version: '1.0.0',
+            author: {
+                name: 'MoonCheung',
+                email: 'salvador23@163.com',
+            },
+            github: 'https://github.com/MoonCheung',
+            powered: ['Vue', 'mpvue', 'Node.js', 'Koa', 'MongoDB', 'Nginx'],
+        },
     },
 };
