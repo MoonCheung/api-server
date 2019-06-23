@@ -4,7 +4,7 @@
   "description": "🤔 My Node Server Project",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "MoonCheung <salvador23@163.com>",
