@@ -19,6 +19,7 @@ module.exports = {
         production: {
             user: 'root',
             host: '193.112.52.155',
+            port: '22',
             ref: 'origin/master',
             repo: 'git@github.com:MoonCheung/node-server.git',
             path: '/www/node-server/',
