@@ -7,7 +7,7 @@
  * @LastEditTime: 2019-05-30 21:42:02
  */
 
-const os = require('os');
+const os = require("os");
 
 /**
  *@param {String} constants 已发生异常进程
@@ -22,25 +22,34 @@ const os = require('os');
  */
 
 async function controller(ctx, next) {
-	let { freemem, cpus, hostname, platform, release, totalmem, type, constants } = os;
-	let total = parseInt(totalmem() / 1024 / 1024);
-	let num = parseInt(freemem() / 1024 / 1024);
-	let percentage = parseInt((num / total) * 100);
-	ctx.body = {
-		code: 1,
-		error: 0,
-		constants: constants.SIGTRAP ? '1' : '0',
-		release: release(),
-		platform: platform(),
-		hostname: hostname(),
-		type: type(),
-		cpus: cpus(),
-		totalmemory: `${total}MB`,
-		Freememory: `${num}MB`,
-		percentage,
-	};
+  let {
+    freemem,
+    cpus,
+    hostname,
+    platform,
+    release,
+    totalmem,
+    type,
+    constants
+  } = os;
+  let total = parseInt(totalmem() / 1024 / 1024);
+  let num = parseInt(freemem() / 1024 / 1024);
+  let percentage = parseInt((num / total) * 100);
+  ctx.body = {
+    code: 1,
+    error: 0,
+    constants: constants.SIGTRAP ? "1" : "0",
+    release: release(),
+    platform: platform(),
+    hostname: hostname(),
+    type: type(),
+    cpus: cpus(),
+    totalmemory: `${total}MB`,
+    Freememory: `${num}MB`,
+    percentage
+  };
 }
 
 module.exports = {
-	controller,
+  controller
 };

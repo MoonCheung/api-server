@@ -6,37 +6,37 @@
  * @LastEditors: MoonCheung
  * @LastEditTime: 2019-06-20 00:11:27
  */
-const autoIncrement = require('mongoose-auto-increment');
-const mongoose = require('mongoose');
-const DB = require('./db');
+const autoIncrement = require("mongoose-auto-increment");
+const mongoose = require("mongoose");
+const DB = require("./db");
 const Schema = mongoose.Schema;
 
 let CountersSchema = new Schema({
-    name: String,
+  name: String
 });
 
 let tabSchema = new Schema({
-    id: {
-        type: Number,
-        ref: 'id',
-    },
-    tagname: String,
-    tagdesc: String,
-    cdate: {
-        type: Date,
-        default: Date.now,
-    },
-    status: {
-        type: Number,
-        default: 1,
-    },
+  id: {
+    type: Number,
+    ref: "id"
+  },
+  tagname: String,
+  tagdesc: String,
+  cdate: {
+    type: Date,
+    default: Date.now
+  },
+  status: {
+    type: Number,
+    default: 1
+  }
 });
 
 tabSchema.plugin(autoIncrement.plugin, {
-    model: 'tag',
-    field: 'id',
-    startAt: 1,
-    incrementBy: 1,
+  model: "tag",
+  field: "id",
+  startAt: 1,
+  incrementBy: 1
 });
-CountersSchema.plugin(autoIncrement.plugin, 'id');
-module.exports = DB.model('tag', tabSchema);
+CountersSchema.plugin(autoIncrement.plugin, "id");
+module.exports = DB.model("tag", tabSchema);

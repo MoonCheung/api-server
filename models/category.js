@@ -7,33 +7,33 @@
  * @LastEditTime: 2019-06-05 15:33:51
  */
 
-const autoIncrement = require('mongoose-auto-increment');
-const mongoose = require('mongoose');
-const DB = require('./db');
+const autoIncrement = require("mongoose-auto-increment");
+const mongoose = require("mongoose");
+const DB = require("./db");
 const Schema = mongoose.Schema;
 
 let CountersSchema = new Schema({
-    name: String,
+  name: String
 });
 
 let catgSchema = new Schema({
-    id: {
-        type: Number,
-        ref: 'id',
-    },
-    categoryname: String,
-    categorydesc: String,
-    cdate: {
-        type: Date,
-        default: Date.now,
-    },
+  id: {
+    type: Number,
+    ref: "id"
+  },
+  categoryname: String,
+  categorydesc: String,
+  cdate: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 catgSchema.plugin(autoIncrement.plugin, {
-    model: 'category',
-    field: 'id',
-    startAt: 1,
-    incrementBy: 1,
+  model: "category",
+  field: "id",
+  startAt: 1,
+  incrementBy: 1
 });
-CountersSchema.plugin(autoIncrement.plugin, 'id');
-module.exports = DB.model('category', catgSchema);
+CountersSchema.plugin(autoIncrement.plugin, "id");
+module.exports = DB.model("category", catgSchema);

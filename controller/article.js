@@ -4,41 +4,41 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-16 18:06:53
+ * @LastEditTime: 2019-06-25 17:18:04
  */
 
-const article = require('../models/article');
+const article = require("../models/article");
 
 /**
  * 添加文章接口 API
  * @param {Object} ctx
  */
 async function insertArticle(ctx) {
-	try {
-		let { title, desc, banner, tag, content, catg } = ctx.request.body;
-		await article
-			.create({
-				title,
-				desc,
-				banner,
-				tag,
-				content,
-				catg,
-			})
-			.then(() => {
-				ctx.body = {
-					code: 1,
-					error: 0,
-					msg: '添加文章成功',
-				};
-			});
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '添加文章失败',
-			err,
-		};
-	}
+  try {
+    let { title, desc, banner, tag, content, catg } = ctx.request.body;
+    await article
+      .create({
+        title,
+        desc,
+        banner,
+        tag,
+        content,
+        catg
+      })
+      .then(() => {
+        ctx.body = {
+          code: 1,
+          error: 0,
+          msg: "添加文章成功"
+        };
+      });
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "添加文章失败",
+      err
+    };
+  }
 }
 
 /**
@@ -46,50 +46,50 @@ async function insertArticle(ctx) {
  * @param {Object} ctx
  */
 async function articleList(ctx) {
-	try {
-		let data = ctx.request.body;
-		let page = parseInt((data.curPage - 1) * data.limit);
-		let pageSize = parseInt(data.limit);
-		let artData = await article
-			.aggregate([
-				{
-					$project: {
-						id: '$id',
-						title: '$title',
-						desc: '$desc',
-						banner: '$banner',
-						tag: '$tag',
-						content: '$content',
-						catg: '$catg',
-						cdate: {
-							$dateToString: {
-								format: '%Y-%m-%d %H:%M:%S',
-								date: '$cdate',
-							},
-						},
-						status: '$status',
-					},
-				},
-			])
-			.skip(page)
-			.limit(pageSize)
-			.sort({
-				id: -1, //降序排列
-			});
-		let total = await article.count({});
-		ctx.body = {
-			code: 1,
-			error: 0,
-			artData,
-			total,
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '获取文章列表失败',
-			err,
-		};
-	}
+  try {
+    let data = ctx.request.body;
+    let page = parseInt((data.curPage - 1) * data.limit);
+    let pageSize = parseInt(data.limit);
+    let artData = await article
+      .aggregate([
+        {
+          $project: {
+            id: "$id",
+            title: "$title",
+            desc: "$desc",
+            banner: "$banner",
+            tag: "$tag",
+            content: "$content",
+            catg: "$catg",
+            cdate: {
+              $dateToString: {
+                format: "%Y-%m-%d %H:%M:%S",
+                date: "$cdate"
+              }
+            },
+            status: "$status"
+          }
+        }
+      ])
+      .skip(page)
+      .limit(pageSize)
+      .sort({
+        id: -1 //降序排列
+      });
+    let total = await article.count({});
+    ctx.body = {
+      code: 1,
+      error: 0,
+      artData,
+      total
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取文章列表失败",
+      err
+    };
+  }
 }
 
 /**
@@ -97,38 +97,38 @@ async function articleList(ctx) {
  * @param {Object} ctx
  */
 async function editArticle(ctx) {
-	try {
-		let { id, title, desc, banner, tag, content, catg } = ctx.request.body;
-		await article
-			.updateOne(
-				{
-					id: id,
-				},
-				{
-					$set: {
-						title,
-						desc,
-						banner,
-						tag,
-						content,
-						catg,
-					},
-				}
-			)
-			.then(() => {
-				ctx.body = {
-					code: 1,
-					error: 0,
-					msg: '编辑文章成功',
-				};
-			});
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '编辑文章失败',
-			err,
-		};
-	}
+  try {
+    let { id, title, desc, banner, tag, content, catg } = ctx.request.body;
+    await article
+      .updateOne(
+        {
+          id: id
+        },
+        {
+          $set: {
+            title,
+            desc,
+            banner,
+            tag,
+            content,
+            catg
+          }
+        }
+      )
+      .then(() => {
+        ctx.body = {
+          code: 1,
+          error: 0,
+          msg: "编辑文章成功"
+        };
+      });
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "编辑文章失败",
+      err
+    };
+  }
 }
 
 /**
@@ -136,30 +136,30 @@ async function editArticle(ctx) {
  * @param {Object} ctx
  */
 async function getArtDetl(ctx) {
-	try {
-		let { id } = ctx.request.body;
-		let ArtDetlData = await article.findOne(
-			{
-				id: id,
-			},
-			{
-				__v: 0,
-				status: 0,
-			}
-		);
-		ctx.body = {
-			code: 1,
-			error: 0,
-			msg: '获取文章详情成功',
-			ArtDetlData,
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '获取文章详情失败',
-			err,
-		};
-	}
+  try {
+    let { id } = ctx.request.body;
+    let ArtDetlData = await article.findOne(
+      {
+        id: id
+      },
+      {
+        __v: 0,
+        status: 0
+      }
+    );
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取文章详情成功",
+      ArtDetlData
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取文章详情失败",
+      err
+    };
+  }
 }
 
 /**
@@ -167,26 +167,26 @@ async function getArtDetl(ctx) {
  * @param {Object} ctx
  */
 async function delArticle(ctx) {
-	try {
-		let { id } = ctx.request.body;
-		await article
-			.deleteOne({
-				id: id,
-			})
-			.then(() => {
-				ctx.body = {
-					code: 1,
-					error: 0,
-					msg: '删除文章成功',
-				};
-			});
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '删除文章失败',
-			err,
-		};
-	}
+  try {
+    let { id } = ctx.request.body;
+    await article
+      .deleteOne({
+        id: id
+      })
+      .then(() => {
+        ctx.body = {
+          code: 1,
+          error: 0,
+          msg: "删除文章成功"
+        };
+      });
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "删除文章失败",
+      err
+    };
+  }
 }
 
 /**
@@ -194,33 +194,33 @@ async function delArticle(ctx) {
  * @param {Object} ctx
  */
 async function chgArtStatus(ctx) {
-	try {
-		let { id, status } = ctx.request.body;
-		await article
-			.updateOne(
-				{
-					id: id,
-				},
-				{
-					$set: {
-						status,
-					},
-				}
-			)
-			.then(() => {
-				ctx.body = {
-					code: 1,
-					error: 0,
-					msg: '改变文章状态成功',
-				};
-			});
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '改变文章状态失败',
-			err,
-		};
-	}
+  try {
+    let { id, status } = ctx.request.body;
+    await article
+      .updateOne(
+        {
+          id: id
+        },
+        {
+          $set: {
+            status
+          }
+        }
+      )
+      .then(() => {
+        ctx.body = {
+          code: 1,
+          error: 0,
+          msg: "改变文章状态成功"
+        };
+      });
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "改变文章状态失败",
+      err
+    };
+  }
 }
 
 /**
@@ -228,82 +228,86 @@ async function chgArtStatus(ctx) {
  * @param {Object} ctx
  */
 async function artAllList(ctx) {
-	try {
-		let artListData = await article.aggregate([
-			{
-				$match: {
-					status: 1,
-				},
-			},
-			{
-				$project: {
-					id: '$_id',
-					uid: '$id',
-					title: '$title',
-					cdate: {
-						$dateToString: {
-							format: '%Y-%m-%d %H:%M:%S',
-							date: '$cdate',
-						},
-					},
-					_id: 0,
-				},
-			},
-			{
-				$sort: {
-					id: -1,
-				},
-			},
-		]);
-		let artTotalData = await article.countDocuments({
-			status: '1',
-		});
-		ctx.body = {
-			code: 1,
-			error: 0,
-			msg: '获取文章列表成功',
-			artListData,
-			artTotalData,
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '获取文章列表失败',
-			err,
-		};
-	}
+  try {
+    let artListData = await article.aggregate([
+      {
+        $match: {
+          status: 1
+        }
+      },
+      {
+        $project: {
+          id: "$_id",
+          uid: "$id",
+          title: "$title",
+          cdate: {
+            $dateToString: {
+              format: "%Y-%m-%d %H:%M:%S",
+              date: "$cdate"
+            }
+          },
+          _id: 0
+        }
+      },
+      {
+        $sort: {
+          id: -1
+        }
+      }
+    ]);
+    let artTotalData = await article.countDocuments({
+      status: "1"
+    });
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取文章列表成功",
+      artListData,
+      artTotalData
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取文章列表失败",
+      err
+    };
+  }
 }
 
+/**
+ * 获取浏览量接口API
+ * @param {Object} ctx
+ */
 async function getPvTotal(ctx) {
-	try {
-		let result = await article.aggregate([
-			{
-				$match: {
-					status: 1,
-				},
-			},
-			{
-				$group: {
-					_id: null,
-					pv_count: {
-						$sum: '$pv',
-					},
-				},
-			},
-		]);
-		ctx.body = {
-			code: 1,
-			error: 0,
-			msg: '获取页面浏览量成功',
-			result,
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '获取页面浏览量失败',
-			err,
-		};
-	}
+  try {
+    let result = await article.aggregate([
+      {
+        $match: {
+          status: 1
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          pv_count: {
+            $sum: "$pv"
+          }
+        }
+      }
+    ]);
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取页面浏览量成功",
+      result
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取页面浏览量失败",
+      err
+    };
+  }
 }
 
 /*******************************小程序相关API*******************************/
@@ -313,63 +317,74 @@ async function getPvTotal(ctx) {
  * @param {Object} ctx
  */
 async function getallAtrApplet(ctx) {
-	try {
-		let data = ctx.request.body;
-		let page = parseInt(data.allPage * 5);
-		let artList = await article.aggregate([
-			{
-				$match: {
-					status: 1,
-				},
-			},
-			{
-				$project: {
-					id: '$id',
-					title: '$title',
-					desc: '$desc',
-					catg: '$catg',
-					pv: '$pv',
-					cdate: {
-						$dateToString: {
-							format: '%Y年%m月%d日',
-							date: '$cdate',
-						},
-					},
-					_id: 0,
-				},
-			},
-			{
-				$lookup: {
-					from: 'users',
-					pipeline: [{ $match: { name: 'MoonCheung' } }, { $project: { _id: 0, introduction: 0, username: 0, password: 0, roles: 0 } }],
-					as: 'myAuthor',
-				},
-			},
-			//$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
-			{ $unwind: '$myAuthor' },
-			{ $skip: page },
-			{
-				$limit: 5,
-			},
-			{
-				$sort: {
-					id: -1, //降序排列
-				},
-			},
-		]);
-		ctx.body = {
-			code: 1,
-			error: 0,
-			msg: '获取所有文章列表成功',
-			artList,
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '获取所有文章列表失败',
-			err,
-		};
-	}
+  try {
+    let data = ctx.request.body;
+    let page = parseInt(data.allPage * 5);
+    let artList = await article.aggregate([
+      {
+        $match: {
+          status: 1
+        }
+      },
+      {
+        $project: {
+          id: "$id",
+          title: "$title",
+          desc: "$desc",
+          catg: "$catg",
+          pv: "$pv",
+          cdate: {
+            $dateToString: {
+              format: "%Y年%m月%d日",
+              date: "$cdate"
+            }
+          },
+          _id: 0
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          pipeline: [
+            { $match: { name: "MoonCheung" } },
+            {
+              $project: {
+                _id: 0,
+                introduction: 0,
+                username: 0,
+                password: 0,
+                roles: 0
+              }
+            }
+          ],
+          as: "myAuthor"
+        }
+      },
+      //$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
+      { $unwind: "$myAuthor" },
+      { $skip: page },
+      {
+        $limit: 5
+      },
+      {
+        $sort: {
+          id: -1 //降序排列
+        }
+      }
+    ]);
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取所有文章列表成功",
+      artList
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取所有文章列表失败",
+      err
+    };
+  }
 }
 
 /**
@@ -377,41 +392,41 @@ async function getallAtrApplet(ctx) {
  * @param {Object} ctx
  */
 async function getArtDeilApplet(ctx) {
-	try {
-		let data = ctx.request.query;
-		let ArtDeilData = await article.findOneAndUpdate(
-			{
-				id: data.id,
-			},
-			{
-				//$inc运算符按指定值递增
-				$inc: { pv: 1 },
-			},
-			{
-				projection: {
-					__v: 0,
-					_id: 0,
-					desc: 0,
-					banner: 0,
-					status: 0,
-				},
-				new: true,
-				upsert: true,
-			}
-		);
-		ctx.body = {
-			code: 1,
-			error: 0,
-			ArtDeilData,
-			msg: '获取文章详情成功',
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '获取文章详情失败',
-			err,
-		};
-	}
+  try {
+    let data = ctx.request.query;
+    let ArtDeilData = await article.findOneAndUpdate(
+      {
+        id: data.id
+      },
+      {
+        //$inc运算符按指定值递增
+        $inc: { pv: 1 }
+      },
+      {
+        projection: {
+          __v: 0,
+          _id: 0,
+          desc: 0,
+          banner: 0,
+          status: 0
+        },
+        new: true,
+        upsert: true
+      }
+    );
+    ctx.body = {
+      code: 1,
+      error: 0,
+      ArtDeilData,
+      msg: "获取文章详情成功"
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取文章详情失败",
+      err
+    };
+  }
 }
 
 /**
@@ -419,64 +434,75 @@ async function getArtDeilApplet(ctx) {
  * @param {Object} ctx
  */
 async function getApptCatgApplet(ctx) {
-	try {
-		let data = ctx.request.body;
-		let page = parseInt(data.curPage * 5);
-		let apptArtList = await article.aggregate([
-			{
-				$match: {
-					status: 1,
-					catg: data.catg,
-				},
-			},
-			{
-				$project: {
-					id: '$id',
-					title: '$title',
-					desc: '$desc',
-					catg: '$catg',
-					pv: '$pv',
-					cdate: {
-						$dateToString: {
-							format: '%Y年%m月%d日',
-							date: '$cdate',
-						},
-					},
-					_id: 0,
-				},
-			},
-			{
-				$lookup: {
-					from: 'users',
-					pipeline: [{ $match: { name: 'MoonCheung' } }, { $project: { _id: 0, introduction: 0, username: 0, password: 0, roles: 0 } }],
-					as: 'apptAuthor',
-				},
-			},
-			//$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
-			{ $unwind: '$apptAuthor' },
-			{ $skip: page },
-			{
-				$limit: 5,
-			},
-			{
-				$sort: {
-					id: -1, //降序排列
-				},
-			},
-		]);
-		ctx.body = {
-			code: 1,
-			error: 0,
-			msg: '获取指定分类文章成功',
-			apptArtList,
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '获取指定分类文章失败',
-			err,
-		};
-	}
+  try {
+    let data = ctx.request.body;
+    let page = parseInt(data.curPage * 5);
+    let apptArtList = await article.aggregate([
+      {
+        $match: {
+          status: 1,
+          catg: data.catg
+        }
+      },
+      {
+        $project: {
+          id: "$id",
+          title: "$title",
+          desc: "$desc",
+          catg: "$catg",
+          pv: "$pv",
+          cdate: {
+            $dateToString: {
+              format: "%Y年%m月%d日",
+              date: "$cdate"
+            }
+          },
+          _id: 0
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          pipeline: [
+            { $match: { name: "MoonCheung" } },
+            {
+              $project: {
+                _id: 0,
+                introduction: 0,
+                username: 0,
+                password: 0,
+                roles: 0
+              }
+            }
+          ],
+          as: "apptAuthor"
+        }
+      },
+      //$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
+      { $unwind: "$apptAuthor" },
+      { $skip: page },
+      {
+        $limit: 5
+      },
+      {
+        $sort: {
+          id: -1 //降序排列
+        }
+      }
+    ]);
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取指定分类文章成功",
+      apptArtList
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取指定分类文章失败",
+      err
+    };
+  }
 }
 
 /**
@@ -484,59 +510,59 @@ async function getApptCatgApplet(ctx) {
  * @param {Object} ctx
  */
 async function chgLikeArtApplet(ctx) {
-	try {
-		let data = ctx.request.body;
-		let result = await article.findOneAndUpdate(
-			{
-				id: data.id,
-			},
-			{
-				$set: { like: data.like },
-			},
-			{
-				projection: {
-					__v: 0,
-					_id: 0,
-					pv: 0,
-					tag: 0,
-					title: 0,
-					catg: 0,
-					desc: 0,
-					content: 0,
-					banner: 0,
-					cdate: 0,
-					status: 0,
-				},
-				new: true,
-				upsert: true,
-			}
-		);
-		ctx.body = {
-			code: 1,
-			error: 0,
-			msg: '改变指定文章点赞成功',
-			result,
-		};
-	} catch (err) {
-		ctx.body = {
-			error: 1,
-			msg: '改变指定文章点赞失败',
-			err,
-		};
-	}
+  try {
+    let data = ctx.request.body;
+    let result = await article.findOneAndUpdate(
+      {
+        id: data.id
+      },
+      {
+        $set: { like: data.like }
+      },
+      {
+        projection: {
+          __v: 0,
+          _id: 0,
+          pv: 0,
+          tag: 0,
+          title: 0,
+          catg: 0,
+          desc: 0,
+          content: 0,
+          banner: 0,
+          cdate: 0,
+          status: 0
+        },
+        new: true,
+        upsert: true
+      }
+    );
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "改变指定文章点赞成功",
+      result
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "改变指定文章点赞失败",
+      err
+    };
+  }
 }
 
 module.exports = {
-	insertArticle,
-	articleList,
-	editArticle,
-	getArtDetl,
-	delArticle,
-	chgArtStatus,
-	artAllList,
-	getPvTotal,
-	getallAtrApplet,
-	getArtDeilApplet,
-	getApptCatgApplet,
-	chgLikeArtApplet,
+  insertArticle,
+  articleList,
+  editArticle,
+  getArtDetl,
+  delArticle,
+  chgArtStatus,
+  artAllList,
+  getPvTotal,
+  getallAtrApplet,
+  getArtDeilApplet,
+  getApptCatgApplet,
+  chgLikeArtApplet
 };

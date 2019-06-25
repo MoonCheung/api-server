@@ -4,7 +4,10 @@
   "description": "🤔 My Node Server Project",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "build": "cross-env NODE_ENV=production nodemon index.js",
+    "start": "pm2 start ecosystem.config.js --env production",
+    "format": "prettier \"**/*.js\" --write"
   },
   "keywords": [],
   "author": "MoonCheung <salvador23@163.com>",
@@ -29,8 +32,8 @@
     "qiniu": "^7.2.1"
   },
   "devDependencies": {
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
-    "nodemon": "^1.18.11"
+    "cross-env": "^5.2.0",
+    "nodemon": "^1.18.11",
+    "prettier": "^1.18.2"
   }
 }

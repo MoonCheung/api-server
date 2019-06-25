@@ -1,0 +1,14 @@
+{ 
+  "restartable": "rs",
+  "colours": true,
+  "verbose": true,
+  "ignore": [
+    ".git",
+    ".svn",
+    "node_modules/**"
+  ],
+  "execMap": {
+    "js": "node --harmony"
+  },
+  "ext": "js,json"
+}

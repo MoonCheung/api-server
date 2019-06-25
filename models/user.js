@@ -7,51 +7,51 @@
  * @LastEditTime: 2019-06-20 10:14:36
  */
 
-const autoIncrement = require('mongoose-auto-increment');
-const mongoose = require('mongoose');
-const DB = require('./db');
+const autoIncrement = require("mongoose-auto-increment");
+const mongoose = require("mongoose");
+const DB = require("./db");
 const Schema = mongoose.Schema;
 
 let CountersSchema = new Schema({
-    name: String,
+  name: String
 });
 
 let UserSchema = new Schema({
-    id: {
-        type: Number,
-        ref: 'id',
-    },
-    username: {
-        type: String,
-        required: true, // 表示该字段是必需的
-        unique: true, // 表示该字段唯一
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    roles: {
-        type: [String],
-    },
-    name: {
-        type: String,
-    },
-    avatar: {
-        type: String,
-    },
-    intro: {
-        type: String,
-    },
-    email: {
-        type: String,
-    },
+  id: {
+    type: Number,
+    ref: "id"
+  },
+  username: {
+    type: String,
+    required: true, // 表示该字段是必需的
+    unique: true // 表示该字段唯一
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  roles: {
+    type: [String]
+  },
+  name: {
+    type: String
+  },
+  avatar: {
+    type: String
+  },
+  intro: {
+    type: String
+  },
+  email: {
+    type: String
+  }
 });
 
 UserSchema.plugin(autoIncrement.plugin, {
-    model: 'user',
-    field: 'id',
-    startAt: 1,
-    incrementBy: 1,
+  model: "user",
+  field: "id",
+  startAt: 1,
+  incrementBy: 1
 });
-CountersSchema.plugin(autoIncrement.plugin, 'id');
-module.exports = DB.model('user', UserSchema);
+CountersSchema.plugin(autoIncrement.plugin, "id");
+module.exports = DB.model("user", UserSchema);
