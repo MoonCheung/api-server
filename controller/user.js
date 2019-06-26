@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 22:01:54
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-18 23:33:53
+ * @LastEditTime: 2019-06-26 21:34:58
  */
 
 const UserModel = require("../models/user");
@@ -15,9 +15,12 @@ const md5 = require("md5");
 async function login(ctx) {
   try {
     let { username, password } = ctx.request.body;
+    console.log(username, password)
+    console.log(md5(password))
     let result = await UserModel.find({
       username
     });
+    console.log(result)
     if (result.length === 0) {
       ctx.body = {
         error: 1,

@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 18:17:53
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-05-26 00:13:46
+ * @LastEditTime: 2019-06-26 23:36:38
  */
 
 const autoIncrement = require("mongoose-auto-increment");
@@ -16,6 +16,10 @@ const success = chalk.bold.blue;
 const error = chalk.bold.red;
 
 const db = mongoose.createConnection(`${CONFIG.mongodb}`, {
+  // 此选项表示设置为 authenticationDatabase to admin
+  // auth:{"authSource": "admin"},
+  // user: "****",
+  // pass: "****",
   keepAlive: true,
   useNewUrlParser: true,
   useCreateIndex: true,
