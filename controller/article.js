@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-25 17:18:04
+ * @LastEditTime: 2019-07-01 16:45:50
  */
 
 const article = require("../models/article");
@@ -39,6 +39,7 @@ async function insertArticle(ctx) {
       err
     };
   }
+
 }
 
 /**

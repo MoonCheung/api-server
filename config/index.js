@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-22 20:56:08
+ * @LastEditTime: 2019-07-01 16:16:10
  */
 
 module.exports = {
@@ -31,6 +31,12 @@ module.exports = {
   // jwtToken
   jwtToken: {
     PrivateKey: "blogs_token"
+  },
+  // 百度推送
+  BAIDU: {
+    url:"http://data.zz.baidu.com",
+    site: "www.ikmoons.com",
+    token: "**************"
   },
   // node服务器信息
   INFO: {

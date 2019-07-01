@@ -5,6 +5,7 @@ const json = require("koa-json");
 const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
 const session = require("koa-session");
+const compress = require("koa-compress");
 const jwt = require("koa-jwt");
 
 const app = new Koa();
@@ -94,6 +95,8 @@ app.use(
 app.use(json());
 // CORS跨域请求配置
 app.use(cors());
+// 压缩中间件
+app.use(compress());
 // router
 app.use(router.routes(), router.allowedMethods());
 
