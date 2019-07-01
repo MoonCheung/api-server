@@ -47,6 +47,12 @@ cd node-server
 # 来进行安装node_modules
 npm install
 
-# 运行node-server
+# 开发环境,运行node-server
 npm run dev
+
+# 通过prettier 格式化代码
+npm run format
+
+# 生产环境,从服务器部署
+npm run start
 ```
