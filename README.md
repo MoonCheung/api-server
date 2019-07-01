@@ -13,9 +13,13 @@ The node server provides RESTful api for application services based on koa
 
 ## 程序结构
 
+- 入口
+
+  - `index.js`: 引入koa2模块,路由,一切配置,启动主程序
+
 - 基础配置 ([config](https://github.com/MoonCheung/node-server/tree/master/config))
 
-  - `index`: 含有端口,session 信息,七牛云 key,mongoDB 数据库,node 服务器信息等等
+  - `index.js`: 含有端口,session 信息,七牛云 key,mongoDB 数据库,node 服务器信息等等
 
 - 业务控制器 ([controller](https://github.com/MoonCheung/node-server/tree/master/controller))
 
@@ -28,8 +32,8 @@ The node server provides RESTful api for application services based on koa
 
 - 路由配置 ([routes](https://github.com/MoonCheung/node-server/tree/master/routes))
 
-  - `index`: 引入各个命名控制器，实现提供 RESTful api 接口
-  - `whitelist`: 白名单内已加入 api 接口,不经过 token 鉴权可直接公用访问
+  - `index.js`: 引入各个命名控制器，实现提供 RESTful api 接口
+  - `whitelist.js`: 白名单内已加入 api 接口,不经过 token 鉴权可直接公用访问
 
 - 业务模块 ([models](https://github.com/MoonCheung/node-server/tree/master/models))
   - 文章
