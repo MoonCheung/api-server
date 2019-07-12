@@ -7,15 +7,15 @@
 
 The node server provides RESTful api for application services based on koa
 
-- Maintained by [MoonCheung](salvador23@163.com)
+- Maintained by [MoonCheung](mailto://salvador23@163.com)
 - Blog backstage: [vue-backstage](https://github.com/MoonCheung/vue-backstage) is provided run by vue + elementUI
-- Blog applet: [mpvue-applet](https://github.com/MoonCheung/mpvue-applet) is provided run by mpvue + Vant + ColorUI
+- Blog applet: [blog-applet](https://github.com/MoonCheung/blog-applet) is provided run by mpvue + Vant + ColorUI
 
 ## 程序结构
 
 - 入口
 
-  - `index.js`: 引入koa2模块,路由,一切配置,启动主程序
+  - `index.js`: 引入 koa2 模块,路由,一切配置,启动主程序
 
 - 基础配置 ([config](https://github.com/MoonCheung/node-server/tree/master/config))
 
@@ -36,6 +36,7 @@ The node server provides RESTful api for application services based on koa
   - `whitelist.js`: 白名单内已加入 api 接口,不经过 token 鉴权可直接公用访问
 
 - 业务模块 ([models](https://github.com/MoonCheung/node-server/tree/master/models))
+
   - 文章
   - 分类
   - 标签
