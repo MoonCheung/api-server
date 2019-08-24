@@ -39,7 +39,6 @@ async function insertArticle(ctx) {
       err
     };
   }
-
 }
 
 /**

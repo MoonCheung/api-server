@@ -20,32 +20,34 @@ const router = require("./routes");
 onerror(app);
 
 // 导航路由中间件
-app.use(async(ctx, next) => {
+app.use(async (ctx, next) => {
   let allowedOrigins = [
-    'http://www.ikmoons.com',
-    'http://api.ikmoons.com',
-    'http://admin.ikmoons.com',
-    'file://'
+    "http://www.ikmoons.com",
+    "http://api.ikmoons.com",
+    "http://admin.ikmoons.com",
+    "file://"
   ];
-  let origin = ctx.request.origin
-  if(allowedOrigins.includes(origin) || origin.includes('localhost')){
-    ctx.set('Access-Control-Allow-Origin', origin)
+  let origin = ctx.request.origin;
+  if (allowedOrigins.includes(origin) || origin.includes("localhost")) {
+    ctx.set("Access-Control-Allow-Origin", origin);
     if (ctx.url.match(/^((?!\/api).)*$/)) {
       ctx.body = CONFIG.INFO;
     }
   }
 
   ctx.set({
-		'Access-Control-Allow-Headers': 'Authorization, Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With',
-		'Access-Control-Allow-Methods': 'PUT,PATCH,POST,GET,DELETE,OPTIONS',
-		'Access-Control-Max-Age': '1728000',
-		'Content-Type': 'application/json;charset=utf-8',
+    "Access-Control-Allow-Headers":
+      "Authorization, Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With",
+    "Access-Control-Allow-Methods": "PUT,PATCH,POST,GET,DELETE,OPTIONS",
+    "Access-Control-Max-Age": "1728000",
+    "Content-Type": "application/json;charset=utf-8"
   });
 
   //OPTIONS
-	if (ctx.request.method == 'OPTIONS') { //默认输出'get'
-		ctx.status = 200;
-		return false;
+  if (ctx.request.method == "OPTIONS") {
+    //默认输出'get'
+    ctx.status = 200;
+    return false;
   }
 
   await next();

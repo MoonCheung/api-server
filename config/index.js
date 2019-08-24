@@ -34,7 +34,7 @@ module.exports = {
   },
   // 百度推送
   BAIDU: {
-    url:"http://data.zz.baidu.com",
+    url: "http://data.zz.baidu.com",
     site: "www.ikmoons.com",
     token: "**************"
   },
