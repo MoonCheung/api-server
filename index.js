@@ -1,3 +1,12 @@
+/*
+ * @Description: 入口
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-08-23 16:13:48
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-09-07 14:35:05
+ */
+
 const Koa = require("koa");
 const onerror = require("koa-onerror");
 const cors = require("@koa/cors");
@@ -36,8 +45,7 @@ app.use(async (ctx, next) => {
   }
 
   ctx.set({
-    "Access-Control-Allow-Headers":
-      "Authorization, Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With",
+    "Access-Control-Allow-Headers": "Authorization, Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With",
     "Access-Control-Allow-Methods": "PUT,PATCH,POST,GET,DELETE,OPTIONS",
     "Access-Control-Max-Age": "1728000",
     "Content-Type": "application/json;charset=utf-8"
@@ -76,8 +84,7 @@ app.use(
 
 app.keys = ["some secret"];
 app.use(
-  session(
-    {
+  session({
       key: CONFIG.session.key,
       maxAge: CONFIG.session.maxAge
     },
@@ -89,7 +96,7 @@ app.use(logger());
 app.use(
   bodyparser({
     enableTypes: ["json", "form", "text"],
-    onerror: function(err, ctx) {
+    onerror: function (err, ctx) {
       ctx.throw("body解析错误:", err);
     }
   })
