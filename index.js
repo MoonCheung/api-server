@@ -1,12 +1,3 @@
-/*
- * @Description: 入口
- * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
- * @Date: 2019-08-23 16:13:48
- * @LastEditors: MoonCheung
- * @LastEditTime: 2019-09-07 14:35:05
- */
-
 const Koa = require("koa");
 const onerror = require("koa-onerror");
 const cors = require("@koa/cors");
