@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:51:06
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-09-22 18:47:04
+ * @LastEditTime: 2019-09-23 09:37:44
  */
 
 const Router = require("koa-router");
@@ -14,7 +14,7 @@ const article = require("../controller/article");
 const category = require("../controller/category");
 const tags = require("../controller/tag");
 const qiniu = require("../controller/qiniu");
-const mail = require("../controller/mail");
+const email = require("../controller/email");
 const CONFIG = require("../config");
 
 /* 添加router的前缀 */
@@ -72,7 +72,7 @@ router.get("/getQNToken", qiniu.QNController.getQiniu);
 // 获取页面浏览数接口
 router.get("/art/getpvtot", article.getPvTotal);
 // 获取邮件接口
-router.post("/sendmail", mail.sendEmail);
+router.post("/sendmail", email.sendEmail);
 
 // /** *** 小程序相关API *****/
 // 获取文章列表API
