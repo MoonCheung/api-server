@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:32:33
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-05 16:13:44
+ * @LastEditTime: 2019-12-08 22:29:34
  */
 
 const categoryModel = require("../models/category");
@@ -49,22 +49,20 @@ async function getCategory(ctx) {
     let page = parseInt((data.curPage - 1) * data.limit);
     let pageSize = parseInt(data.limit);
     let catgData = await categoryModel
-      .aggregate([
-        {
-          $project: {
-            id: "$_id", //将_id映射成id
-            categoryname: "$categoryname",
-            categorydesc: "$categorydesc",
-            cdate: {
-              $dateToString: {
-                format: "%Y-%m-%d %H:%M:%S",
-                date: "$cdate"
-              }
-            },
-            _id: 0
-          }
+      .aggregate([{
+        $project: {
+          id: "$_id", //将_id映射成id
+          categoryname: "$categoryname",
+          categorydesc: "$categorydesc",
+          cdate: {
+            $dateToString: {
+              format: "%Y-%m-%d %H:%M:%S",
+              date: "$cdate"
+            }
+          },
+          _id: 0
         }
-      ])
+      }])
       .skip(page)
       .limit(pageSize)
       .sort({
@@ -93,17 +91,14 @@ async function editCategory(ctx) {
   try {
     let { id, categoryname, categorydesc } = ctx.request.body;
     await categoryModel
-      .updateOne(
-        {
-          _id: id
-        },
-        {
-          $set: {
-            categoryname,
-            categorydesc
-          }
+      .updateOne({
+        _id: id
+      }, {
+        $set: {
+          categoryname,
+          categorydesc
         }
-      )
+      })
       .then(() => {
         ctx.body = {
           code: 1,
@@ -153,13 +148,10 @@ async function delCategory(ctx) {
  */
 async function getAllCatg(ctx) {
   try {
-    let result = await categoryModel.find(
-      {},
-      {
-        categorydesc: 0,
-        __v: 0
-      }
-    );
+    let result = await categoryModel.find({}, {
+      categorydesc: 0,
+      __v: 0
+    });
     ctx.body = {
       code: 1,
       error: 0,
@@ -181,14 +173,11 @@ async function getAllCatg(ctx) {
  */
 async function getAllCatgApplet(ctx) {
   try {
-    let result = await categoryModel.find(
-      {},
-      {
-        _id: 0,
-        categorydesc: 0,
-        __v: 0
-      }
-    );
+    let result = await categoryModel.find({}, {
+      _id: 0,
+      categorydesc: 0,
+      __v: 0
+    });
     ctx.body = {
       code: 1,
       error: 0,

@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 22:01:54
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-08-24 12:59:17
+ * @LastEditTime: 2019-12-08 22:30:51
  */
 
 const UserModel = require("../models/user");
@@ -28,15 +28,13 @@ async function login(ctx) {
       //TODO:md5(md5(密码))
       if (Object.is(userInfo.password, md5(password))) {
         let name = (ctx.session.username = userInfo.username);
-        const token = jwt.sign(
-          {
+        const token = jwt.sign({
             data: {
               name: name,
               _id: userInfo._id
             }
           },
-          config.jwtToken.PrivateKey,
-          {
+          config.jwtToken.PrivateKey, {
             expiresIn: "2h" //2个小时到期
           }
         );
@@ -122,31 +120,27 @@ async function updateInfo(ctx) {
       _id: data.id
     });
     if (Object.is(userInfo.password, md5(data.oldPwd))) {
-      let result = await UserModel.findOneAndUpdate(
-        {
-          _id: data.id
-        },
-        {
-          $set: {
-            name: data.nickname,
-            password: md5(data.newPwd), //TODO:md5(md5(密码))
-            intro: data.intro,
-            email: data.email,
-            avatar: data.avatar
-          }
-        },
-        {
-          projection: {
-            __v: 0,
-            _id: 0,
-            password: 0,
-            intro: 0,
-            email: 0
-          },
-          new: true,
-          upsert: true
+      let result = await UserModel.findOneAndUpdate({
+        _id: data.id
+      }, {
+        $set: {
+          name: data.nickname,
+          password: md5(data.newPwd), //TODO:md5(md5(密码))
+          intro: data.intro,
+          email: data.email,
+          avatar: data.avatar
         }
-      );
+      }, {
+        projection: {
+          __v: 0,
+          _id: 0,
+          password: 0,
+          intro: 0,
+          email: 0
+        },
+        new: true,
+        upsert: true
+      });
       ctx.body = {
         code: 1,
         error: 0,

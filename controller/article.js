@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-08-31 01:01:33
+ * @LastEditTime: 2019-12-08 22:30:26
  */
 
 const article = require("../models/article");
@@ -51,26 +51,24 @@ async function articleList(ctx) {
     let page = parseInt((data.curPage - 1) * data.limit);
     let pageSize = parseInt(data.limit);
     let artData = await article
-      .aggregate([
-        {
-          $project: {
-            id: "$id",
-            title: "$title",
-            desc: "$desc",
-            banner: "$banner",
-            tag: "$tag",
-            content: "$content",
-            catg: "$catg",
-            cdate: {
-              $dateToString: {
-                format: "%Y-%m-%d %H:%M:%S",
-                date: "$cdate"
-              }
-            },
-            status: "$status"
-          }
+      .aggregate([{
+        $project: {
+          id: "$id",
+          title: "$title",
+          desc: "$desc",
+          banner: "$banner",
+          tag: "$tag",
+          content: "$content",
+          catg: "$catg",
+          cdate: {
+            $dateToString: {
+              format: "%Y-%m-%d %H:%M:%S",
+              date: "$cdate"
+            }
+          },
+          status: "$status"
         }
-      ])
+      }])
       .skip(page)
       .limit(pageSize)
       .sort({
@@ -100,21 +98,18 @@ async function editArticle(ctx) {
   try {
     let { id, title, desc, banner, tag, content, catg } = ctx.request.body;
     await article
-      .updateOne(
-        {
-          id: id
-        },
-        {
-          $set: {
-            title,
-            desc,
-            banner,
-            tag,
-            content,
-            catg
-          }
+      .updateOne({
+        id: id
+      }, {
+        $set: {
+          title,
+          desc,
+          banner,
+          tag,
+          content,
+          catg
         }
-      )
+      })
       .then(() => {
         ctx.body = {
           code: 1,
@@ -138,15 +133,12 @@ async function editArticle(ctx) {
 async function getArtDetl(ctx) {
   try {
     let { id } = ctx.request.body;
-    let ArtDetlData = await article.findOne(
-      {
-        id: id
-      },
-      {
-        __v: 0,
-        status: 0
-      }
-    );
+    let ArtDetlData = await article.findOne({
+      id: id
+    }, {
+      __v: 0,
+      status: 0
+    });
     ctx.body = {
       code: 1,
       error: 0,
@@ -197,16 +189,13 @@ async function chgArtStatus(ctx) {
   try {
     let { id, status } = ctx.request.body;
     await article
-      .updateOne(
-        {
-          id: id
-        },
-        {
-          $set: {
-            status
-          }
+      .updateOne({
+        id: id
+      }, {
+        $set: {
+          status
         }
-      )
+      })
       .then(() => {
         ctx.body = {
           code: 1,
@@ -229,8 +218,7 @@ async function chgArtStatus(ctx) {
  */
 async function artAllList(ctx) {
   try {
-    let artListData = await article.aggregate([
-      {
+    let artListData = await article.aggregate([{
         $match: {
           status: 1
         }
@@ -280,8 +268,7 @@ async function artAllList(ctx) {
  */
 async function getPvTotal(ctx) {
   try {
-    let result = await article.aggregate([
-      {
+    let result = await article.aggregate([{
         $match: {
           status: 1
         }
@@ -320,8 +307,7 @@ async function getallAtrApplet(ctx) {
   try {
     let data = ctx.request.body;
     let page = parseInt(data.allPage * 5);
-    let artList = await article.aggregate([
-      {
+    let artList = await article.aggregate([{
         $match: {
           status: 1
         }
@@ -394,26 +380,22 @@ async function getallAtrApplet(ctx) {
 async function getArtDeilApplet(ctx) {
   try {
     let data = ctx.request.query;
-    let ArtDeilData = await article.findOneAndUpdate(
-      {
-        id: data.id
+    let ArtDeilData = await article.findOneAndUpdate({
+      id: data.id
+    }, {
+      //$inc运算符按指定值递增
+      $inc: { pv: 1 }
+    }, {
+      projection: {
+        __v: 0,
+        _id: 0,
+        desc: 0,
+        banner: 0,
+        status: 0
       },
-      {
-        //$inc运算符按指定值递增
-        $inc: { pv: 1 }
-      },
-      {
-        projection: {
-          __v: 0,
-          _id: 0,
-          desc: 0,
-          banner: 0,
-          status: 0
-        },
-        new: true,
-        upsert: true
-      }
-    );
+      new: true,
+      upsert: true
+    });
     ctx.body = {
       code: 1,
       error: 0,
@@ -437,8 +419,7 @@ async function getApptCatgApplet(ctx) {
   try {
     let data = ctx.request.body;
     let page = parseInt(data.curPage * 5);
-    let apptArtList = await article.aggregate([
-      {
+    let apptArtList = await article.aggregate([{
         $match: {
           status: 1,
           catg: data.catg
@@ -512,31 +493,27 @@ async function getApptCatgApplet(ctx) {
 async function chgLikeArtApplet(ctx) {
   try {
     let data = ctx.request.body;
-    let result = await article.findOneAndUpdate(
-      {
-        id: data.id
+    let result = await article.findOneAndUpdate({
+      id: data.id
+    }, {
+      $set: { like: data.like }
+    }, {
+      projection: {
+        __v: 0,
+        _id: 0,
+        pv: 0,
+        tag: 0,
+        title: 0,
+        catg: 0,
+        desc: 0,
+        content: 0,
+        banner: 0,
+        cdate: 0,
+        status: 0
       },
-      {
-        $set: { like: data.like }
-      },
-      {
-        projection: {
-          __v: 0,
-          _id: 0,
-          pv: 0,
-          tag: 0,
-          title: 0,
-          catg: 0,
-          desc: 0,
-          content: 0,
-          banner: 0,
-          cdate: 0,
-          status: 0
-        },
-        new: true,
-        upsert: true
-      }
-    );
+      new: true,
+      upsert: true
+    });
     ctx.body = {
       code: 1,
       error: 0,

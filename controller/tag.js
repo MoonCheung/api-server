@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:33:34
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-05-30 21:42:11
+ * @LastEditTime: 2019-12-08 22:31:02
  */
 
 const tagModel = require("../models/tag");
@@ -49,22 +49,20 @@ async function getTag(ctx) {
     let page = parseInt((data.curPage - 1) * data.limit);
     let pageSize = parseInt(data.limit);
     let tagsData = await tagModel
-      .aggregate([
-        {
-          $project: {
-            id: "$_id", //将_id映射成id
-            tagname: "$tagname",
-            tagdesc: "$tagdesc",
-            cdate: {
-              $dateToString: {
-                format: "%Y-%m-%d %H:%M:%S",
-                date: "$cdate"
-              }
-            },
-            _id: 0
-          }
+      .aggregate([{
+        $project: {
+          id: "$_id", //将_id映射成id
+          tagname: "$tagname",
+          tagdesc: "$tagdesc",
+          cdate: {
+            $dateToString: {
+              format: "%Y-%m-%d %H:%M:%S",
+              date: "$cdate"
+            }
+          },
+          _id: 0
         }
-      ])
+      }])
       .skip(page)
       .limit(pageSize)
       .sort({
@@ -93,17 +91,14 @@ async function editTag(ctx) {
   try {
     let { id, tagname, tagdesc } = ctx.request.body;
     await tagModel
-      .updateOne(
-        {
-          _id: id
-        },
-        {
-          $set: {
-            tagname,
-            tagdesc
-          }
+      .updateOne({
+        _id: id
+      }, {
+        $set: {
+          tagname,
+          tagdesc
         }
-      )
+      })
       .then(() => {
         ctx.body = {
           code: 1,
@@ -153,13 +148,10 @@ async function delTag(ctx) {
  */
 async function getAllTag(ctx) {
   try {
-    let result = await tagModel.find(
-      {},
-      {
-        tagdesc: 0,
-        __v: 0
-      }
-    );
+    let result = await tagModel.find({}, {
+      tagdesc: 0,
+      __v: 0
+    });
     ctx.body = {
       code: 1,
       error: 0,
