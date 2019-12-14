@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-08 22:30:26
+ * @LastEditTime: 2019-12-14 21:59:34
  */
 
 const article = require("../models/article");
@@ -529,6 +529,66 @@ async function chgLikeArtApplet(ctx) {
   }
 }
 
+/*******************************Nuxt博客相关API*******************************/
+/**
+ * 获取文章列表API
+ * @param {*} ctx
+ */
+async function fetchAllArt(ctx) {
+  try {
+    let data = ctx.request.body;
+    let page = parseInt(data.page * 5);
+    let result = await article.aggregate([{
+        $match: {
+          status: 1
+        }
+      },
+      {
+        $project: {
+          id: "$id",
+          title: "$title",
+          desc: "$desc",
+          banner: "$banner",
+          catg: "$catg",
+          pv: "$pv",
+          like: "$like",
+          comment: "$comment",
+          cdate: {
+            $dateToString: {
+              format: "%Y年%m月%d日",
+              date: "$cdate"
+            }
+          },
+          _id: 0
+        }
+      },
+      { $skip: page },
+      {
+        $limit: 5
+      },
+      {
+        $sort: {
+          id: -1 //降序排列
+        }
+      }
+    ])
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取文章成功",
+      artList: result
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取文章失败",
+      err
+    }
+  }
+}
+
+
+
 module.exports = {
   insertArticle,
   articleList,
@@ -541,5 +601,6 @@ module.exports = {
   getallAtrApplet,
   getArtDeilApplet,
   getApptCatgApplet,
-  chgLikeArtApplet
+  chgLikeArtApplet,
+  fetchAllArt
 };
