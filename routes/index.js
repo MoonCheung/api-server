@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:51:06
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-09-23 09:37:44
+ * @LastEditTime: 2019-12-13 13:29:08
  */
 
 const Router = require("koa-router");
@@ -74,7 +74,7 @@ router.get("/art/getpvtot", article.getPvTotal);
 // 获取邮件接口
 router.post("/sendmail", email.sendEmail);
 
-// /** *** 小程序相关API *****/
+/***** 小程序相关API *****/
 // 获取文章列表API
 router.post("/art/getallart", article.getallAtrApplet);
 // 获取文章详情API
@@ -85,5 +85,8 @@ router.get("/catg/catglist", category.getAllCatgApplet);
 router.post("/art/apptcatg", article.getApptCatgApplet);
 // 改变点赞文章API
 router.post("/art/chglike", article.chgLikeArtApplet);
+
+/***** Nuxt博客相关API *****/
+router.post("/art/fetchallart", article.fetchAllArt);
 
 module.exports = router;

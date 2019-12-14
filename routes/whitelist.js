@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-25 23:17:40
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-09-23 09:41:06
+ * @LastEditTime: 2019-12-13 13:45:04
  */
 
 const whitelist = [
@@ -18,5 +18,6 @@ const whitelist = [
   /^\/api\/art\/chglike/,
   /^\/api\/system/,
   /^\/api\/sendmail/,
+  /^\/api\/art\/fetchallart/,
 ];
 module.exports = whitelist;
