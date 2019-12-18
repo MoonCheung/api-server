@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:33:34
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-08 22:31:02
+ * @LastEditTime: 2019-12-17 14:14:55
  */
 
 const tagModel = require("../models/tag");
@@ -17,8 +17,7 @@ async function addTag(ctx) {
   try {
     let { tagname, tagdesc } = ctx.request.body;
     // let cdate = new Date().getTime();
-    await tagModel
-      .create({
+    await tagModel.create({
         tagname,
         tagdesc
         // cdate
@@ -48,8 +47,7 @@ async function getTag(ctx) {
     let data = ctx.request.body; //curPage: 1, limit: 10
     let page = parseInt((data.curPage - 1) * data.limit);
     let pageSize = parseInt(data.limit);
-    let tagsData = await tagModel
-      .aggregate([{
+    let tagsData = await tagModel.aggregate([{
         $project: {
           id: "$_id", //将_id映射成id
           tagname: "$tagname",
@@ -90,8 +88,7 @@ async function getTag(ctx) {
 async function editTag(ctx) {
   try {
     let { id, tagname, tagdesc } = ctx.request.body;
-    await tagModel
-      .updateOne({
+    await tagModel.updateOne({
         _id: id
       }, {
         $set: {
@@ -122,8 +119,7 @@ async function editTag(ctx) {
 async function delTag(ctx) {
   try {
     let { id } = ctx.request.body;
-    await tagModel
-      .deleteOne({
+    await tagModel.deleteOne({
         _id: id
       })
       .then(() => {
@@ -191,11 +187,71 @@ async function getTagTotal(ctx) {
   }
 }
 
+/*******************************Nuxt博客相关API*******************************/
+async function fetchAllTag(ctx) {
+  try {
+    let result = await tagModel.aggregate([{
+        $match: {
+          status: 1,
+        }
+      },
+      {
+        $project: {
+          id: "$id",
+          tagname: "$tagname",
+          _id: 0
+        },
+      },
+      {
+        $lookup: {
+          from: "articles",
+          let: { leftTag: '$tagname' },
+          pipeline: [{
+              $match: {
+                status: 1,
+                $expr: { $in: ['$$leftTag', '$tag'] }
+              }
+            },
+            {
+              $group: {
+                _id: null,
+                count: {
+                  $sum: 1
+                }
+              }
+            }
+          ],
+          as: "tagNum"
+        }
+      }, {
+        //$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
+        $unwind: {
+          path: "$tagNum",
+          preserveNullAndEmptyArrays: true // 空的数组也拆分
+        }
+      }
+    ]);
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取所有标签成功",
+      result
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取所有标签失败",
+      err
+    };
+  }
+}
+
 module.exports = {
   addTag,
   getTag,
   editTag,
   delTag,
   getAllTag,
-  getTagTotal
+  getTagTotal,
+  fetchAllTag
 };

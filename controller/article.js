@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-14 21:59:34
+ * @LastEditTime: 2019-12-18 21:40:36
  */
 
 const article = require("../models/article");
@@ -575,8 +575,8 @@ async function fetchAllArt(ctx) {
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取文章成功",
-      artList: result
+      result,
+      msg: "获取文章成功"
     }
   } catch (err) {
     ctx.body = {
@@ -587,7 +587,88 @@ async function fetchAllArt(ctx) {
   }
 }
 
+/**
+ * 获取指定ID文章详情接口API
+ * @param {*} ctx
+ */
+async function fetchArtDeil(ctx) {
+  try {
+    const { id } = ctx.params;
+    let result = await article.findOneAndUpdate({
+      id
+    }, {
+      //$inc运算符按指定值递增
+      $inc: { pv: 1 }
+    }, {
+      projection: {
+        __v: 0,
+        _id: 0,
+        desc: 0,
+        status: 0
+      },
+      new: true,
+      upsert: true
+    });
+    ctx.body = {
+      code: 1,
+      error: 0,
+      result,
+      msg: "获取文章详情成功"
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取文章详情失败",
+      err
+    }
+  }
+}
 
+/**
+ * 获取热门文章接口API
+ * @param {*} ctx
+ */
+async function fetchHotArt(ctx) {
+  try {
+    let result = await article.aggregate([{
+        $match: {
+          status: 1,
+          pv: {
+            // TODO: 暂时等会改
+            $gte: 20
+          }
+        }
+      },
+      {
+        $project: {
+          id: "$id",
+          title: "$title",
+          _id: 0
+        }
+      },
+      {
+        $limit: 10
+      },
+      {
+        $sort: {
+          id: -1 //降序排列
+        }
+      }
+    ])
+    ctx.body = {
+      code: 1,
+      error: 0,
+      result,
+      msg: "获取热门文章成功"
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取热门文章失败",
+      err
+    }
+  }
+}
 
 module.exports = {
   insertArticle,
@@ -602,5 +683,7 @@ module.exports = {
   getArtDeilApplet,
   getApptCatgApplet,
   chgLikeArtApplet,
-  fetchAllArt
+  fetchAllArt,
+  fetchArtDeil,
+  fetchHotArt
 };
