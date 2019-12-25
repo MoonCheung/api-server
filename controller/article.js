@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-18 21:40:36
+ * @LastEditTime: 2019-12-22 01:59:31
  */
 
 const article = require("../models/article");
@@ -593,7 +593,7 @@ async function fetchAllArt(ctx) {
  */
 async function fetchArtDeil(ctx) {
   try {
-    const { id } = ctx.params;
+    const { id } = ctx.request.body;
     let result = await article.findOneAndUpdate({
       id
     }, {
@@ -670,6 +670,72 @@ async function fetchHotArt(ctx) {
   }
 }
 
+/**
+ * 获取文章归档接口API
+ * @param {*} ctx
+ */
+async function fetchArtArch(ctx) {
+  try {
+    let result = await article.aggregate([{
+        $match: {
+          status: 1,
+        }
+      },
+      {
+        $group: {
+          _id: {
+            year: {
+              $year: "$cdate"
+            },
+            month: {
+              $month: "$cdate"
+            },
+          },
+          firstDate: {
+            $push: {
+              id: "$id",
+              title: "$title",
+              date: {
+                $dateToString: {
+                  format: "%m月%d日",
+                  date: "$cdate"
+                }
+              }
+            }
+          }
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: "$_id.year",
+          },
+          secondDate: { $push: { month: "$_id.month", items: "$firstDate" } }
+        }
+      },
+      {
+        $sort: {
+          id: -1 //降序排列
+        }
+      }
+    ])
+    let count = await article.find().where({ status: 1 }).countDocuments();
+    ctx.body = {
+      code: 1,
+      error: 0,
+      result,
+      count,
+      msg: "获取文章归档成功"
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取文章归档失败",
+      err
+    }
+  }
+}
+
 module.exports = {
   insertArticle,
   articleList,
@@ -685,5 +751,6 @@ module.exports = {
   chgLikeArtApplet,
   fetchAllArt,
   fetchArtDeil,
-  fetchHotArt
+  fetchHotArt,
+  fetchArtArch
 };

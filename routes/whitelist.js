@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-25 23:17:40
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-17 15:20:51
+ * @LastEditTime: 2019-12-25 21:14:05
  */
 
 const whitelist = [
@@ -23,5 +23,9 @@ const whitelist = [
   /^\/api\/art\/fetchhotart/,
   /^\/api\/tag\/fetchalltag/,
   /^\/api\/catg\/fetchallcatg/,
+  /^\/api\/catg\/fetchapptcatg/,
+  /^\/api\/tag\/fetchappttag/,
+  /^\/api\/art\/fetchartarch/,
+  /^\/api\/cmt\/fetchaddcmt/,
 ];
 module.exports = whitelist;

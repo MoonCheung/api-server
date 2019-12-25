@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:51:06
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-17 15:21:06
+ * @LastEditTime: 2019-12-25 21:14:08
  */
 
 const Router = require("koa-router");
@@ -15,6 +15,7 @@ const category = require("../controller/category");
 const tags = require("../controller/tag");
 const qiniu = require("../controller/qiniu");
 const email = require("../controller/email");
+const comment = require('../controller/comment');
 const CONFIG = require("../config");
 
 /* 添加router的前缀 */
@@ -90,12 +91,20 @@ router.post("/art/chglike", article.chgLikeArtApplet);
 // 获取文章列表API
 router.post("/art/fetchallart", article.fetchAllArt);
 // 获取指定ID文章详情API
-router.get("/art/fetchartdeil/:id", article.fetchArtDeil);
+router.post("/art/fetchartdeil", article.fetchArtDeil);
 // 获取热门文章列表API
 router.get("/art/fetchhotart", article.fetchHotArt);
 // 获取所有标签API
-router.get("/tag/fetchalltag", tags.fetchAllTag)
+router.get("/tag/fetchalltag", tags.fetchAllTag);
 // 获取所有分类API
-router.get('/catg/fetchallcatg', category.fetchAllCatg)
+router.get('/catg/fetchallcatg', category.fetchAllCatg);
+// 获取指定分类文章API
+router.post('/catg/fetchapptcatg', category.fetchApptCatg);
+// 获取指定标签文章API
+router.post('/tag/fetchappttag', tags.fetchApptTag);
+// 获取文章归档API
+router.get('/art/fetchartarch', article.fetchArtArch);
+// 添加评论API
+router.post('/cmt/fetchaddcmt', comment.fetchAddComment);
 
 module.exports = router;

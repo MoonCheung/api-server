@@ -4,10 +4,11 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:33:34
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-17 14:14:55
+ * @LastEditTime: 2019-12-20 01:10:15
  */
 
 const tagModel = require("../models/tag");
+const article = require("../models/article");
 
 /**
  * 添加标签API
@@ -188,6 +189,10 @@ async function getTagTotal(ctx) {
 }
 
 /*******************************Nuxt博客相关API*******************************/
+/**
+ *  获取所有标签对应数量 API
+ * @param {*} ctx
+ */
 async function fetchAllTag(ctx) {
   try {
     let result = await tagModel.aggregate([{
@@ -246,6 +251,64 @@ async function fetchAllTag(ctx) {
   }
 }
 
+/**
+ * 获取指定标签文章接口
+ * @param {*} ctx
+ */
+async function fetchApptTag(ctx) {
+  try {
+    let data = ctx.request.body;
+    let page = parseInt(data.page * 5);
+    let result = await article.aggregate([{
+        $match: {
+          status: 1,
+          tag: data.tag
+        }
+      },
+      {
+        $project: {
+          id: "$id",
+          title: "$title",
+          desc: "$desc",
+          banner: "$banner",
+          catg: "$catg",
+          pv: "$pv",
+          like: "$like",
+          comment: "$comment",
+          cdate: {
+            $dateToString: {
+              format: "%Y年%m月%d日",
+              date: "$cdate"
+            }
+          },
+          _id: 0
+        }
+      },
+      { $skip: page },
+      {
+        $limit: 5
+      },
+      {
+        $sort: {
+          id: -1 //降序排列
+        }
+      }
+    ])
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取指定标签文章成功",
+      result
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取指定标签文章失败",
+      err
+    };
+  }
+}
+
 module.exports = {
   addTag,
   getTag,
@@ -253,5 +316,6 @@ module.exports = {
   delTag,
   getAllTag,
   getTagTotal,
-  fetchAllTag
+  fetchAllTag,
+  fetchApptTag
 };

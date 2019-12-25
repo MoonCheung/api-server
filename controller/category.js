@@ -4,10 +4,11 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:32:33
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-08 22:29:34
+ * @LastEditTime: 2019-12-20 01:00:53
  */
 
 const categoryModel = require("../models/category");
+const article = require("../models/article");
 
 /**
  * 添加分类 API
@@ -167,6 +168,8 @@ async function getAllCatg(ctx) {
   }
 }
 
+/*******************************小程序相关API*******************************/
+
 /**
  * 获取所有分类 API (排除分类描述)
  * @param {Object} ctx
@@ -193,11 +196,135 @@ async function getAllCatgApplet(ctx) {
   }
 }
 
+/*******************************Nuxt博客相关API*******************************/
+
+/**
+ * 获取所有分类对应数量 API (排除其他字段，包括另个集合里字段)
+ * @param {*} ctx
+ */
+async function fetchAllCatg(ctx) {
+  try {
+    let result = await categoryModel.aggregate([{
+        $project: {
+          id: "$id",
+          categoryname: "$categoryname",
+          name: "",
+          link: "",
+          _id: 0
+        },
+      },
+      {
+        $lookup: {
+          from: "articles",
+          let: { leftCatg: '$categoryname' },
+          pipeline: [{
+              $match: {
+                status: 1,
+                $expr: {
+                  $eq: ["$catg", "$$leftCatg"]
+                }
+              }
+            },
+            {
+              $group: {
+                _id: null,
+                count: {
+                  $sum: 1
+                }
+              }
+            }
+          ],
+          as: "catgNum"
+        }
+      },
+      {
+        //$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
+        $unwind: {
+          path: "$catgNum",
+          preserveNullAndEmptyArrays: true // 空的数组也拆分
+        }
+      }
+    ]);
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取所有分类成功",
+      result
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取所有分类失败",
+      err
+    };
+  }
+}
+
+/**
+ * 获取指定分类文章接口
+ * @param {*} ctx
+ */
+async function fetchApptCatg(ctx) {
+  try {
+    let data = ctx.request.body;
+    let page = parseInt(data.page * 5);
+    let result = await article.aggregate([{
+        $match: {
+          status: 1,
+          catg: data.catg
+        }
+      },
+      {
+        $project: {
+          id: "$id",
+          title: "$title",
+          desc: "$desc",
+          banner: "$banner",
+          catg: "$catg",
+          pv: "$pv",
+          like: "$like",
+          comment: "$comment",
+          cdate: {
+            $dateToString: {
+              format: "%Y年%m月%d日",
+              date: "$cdate"
+            }
+          },
+          _id: 0
+        }
+      },
+      { $skip: page },
+      {
+        $limit: 5
+      },
+      {
+        $sort: {
+          id: -1 //降序排列
+        }
+      }
+    ])
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取指定分类文章成功",
+      result
+    };
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取指定分类文章失败",
+      err
+    };
+  }
+}
+
 module.exports = {
   addCategory,
   getCategory,
   editCategory,
   delCategory,
   getAllCatg,
-  getAllCatgApplet
+  getAllCatgApplet,
+  fetchAllCatg,
+  fetchApptCatg
 };
