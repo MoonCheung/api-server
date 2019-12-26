@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-07-01 16:16:10
+ * @LastEditTime: 2019-12-25 22:07:42
  */
 
 module.exports = {
@@ -52,5 +52,11 @@ module.exports = {
       github: "https://github.com/MoonCheung",
       powered: ["Vue", "mpvue", "Node.js", "Koa", "MongoDB", "Nginx"]
     }
+  },
+  // gravatar 配置
+  AVATAR: {
+    size: '80',
+    r: 'x',
+    d: 'retro'
   }
 };
