@@ -9,12 +9,18 @@
     "start": "pm2 start ecosystem.config.js --env production",
     "format": "prettier \"**/*.js\" --write"
   },
-  "keywords": [],
+  "keywords": [
+    "koa",
+    "mongoose",
+    "qiniu",
+    "prettier"
+  ],
   "author": "MoonCheung <salvador23@163.com>",
   "license": "MIT",
   "dependencies": {
     "@koa/cors": "^2.2.3",
     "chalk": "^2.4.2",
+    "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
@@ -27,6 +33,7 @@
     "koa-session": "^5.10.1",
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
+    "markdown-it": "^10.0.0",
     "md5": "^2.2.1",
     "mongoose": "^5.5.1",
     "mongoose-auto-increment": "^5.0.1",

@@ -87,7 +87,7 @@ app.use(logger());
 app.use(
   bodyparser({
     enableTypes: ["json", "form", "text"],
-    onerror: function (err, ctx) {
+    onerror: function(err, ctx) {
       ctx.throw("body解析错误:", err);
     }
   })
