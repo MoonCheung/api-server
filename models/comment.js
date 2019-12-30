@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 23:38:34
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-25 23:24:32
+ * @LastEditTime: 2019-12-30 22:03:24
  */
 
 const autoIncrement = require("mongoose-auto-increment");
@@ -36,6 +36,16 @@ let CommentSchema = new Schema({
     type: String,
     required: true
   },
+  // IP地址
+  from_ip: {
+    type: String
+  },
+  // IP物理地址
+  from_locate: {
+    type: Object,
+  },
+  // 用户代理解析器
+  from_ua: String,
   from_date: {
     type: Date,
     default: Date.now
@@ -45,6 +55,12 @@ let CommentSchema = new Schema({
   to_webSite: String,
   to_avatar: String,
   to_content: String,
+  // IP物理地址
+  to_locate: {
+    type: Object
+  },
+  // 用户代理解析器
+  to_ua: String,
   to_date: Date,
   // 点赞数
   like: {
