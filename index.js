@@ -6,9 +6,10 @@ const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
 const session = require("koa-session");
 const compress = require("koa-compress");
+const userAgent = require('koa2-useragent');
 const jwt = require("koa-jwt");
 
-const app = new Koa();
+const app = new Koa({ proxy: true });
 
 // 导入白名单
 const whitelist = require("./routes/whitelist");
@@ -51,6 +52,9 @@ app.use(async (ctx, next) => {
 
   await next();
 });
+
+// 用户代理解析器
+app.use(userAgent());
 
 // token错误处理
 app.use((ctx, next) =>
