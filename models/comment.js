@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 23:38:34
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-07 17:02:00
+ * @LastEditTime: 2020-01-08 00:19:21
  */
 
 const autoIncrement = require('mongoose-auto-increment');
@@ -56,15 +56,11 @@ let CommentSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  // 评价者回复
-  // reply: {
-  //   type: Array,
-  //   default: []
-  // },
+  // 子评论数组
   replys: [{
     type: Schema.Types.ObjectId,
     ref: 'reply',
-    autopopulate: true
+    autopopulate: { select: '-_id-__v' }
   }],
   // 回复数
   reply_count: {
