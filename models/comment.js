@@ -4,10 +4,11 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 23:38:34
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-04 17:15:30
+ * @LastEditTime: 2020-01-07 17:02:00
  */
 
 const autoIncrement = require('mongoose-auto-increment');
+const autopopulate = require('mongoose-autopopulate');
 const mongoose = require('mongoose');
 const DB = require('./db');
 const Schema = mongoose.Schema;
@@ -23,7 +24,10 @@ let CommentSchema = new Schema({
     ref: 'id',
   },
   // 单一文章ID
-  artId: Number,
+  artId: {
+    type: Number,
+    ref: 'article'
+  },
   from_user: {
     type: String,
     required: true,
@@ -53,9 +57,19 @@ let CommentSchema = new Schema({
     default: Date.now,
   },
   // 评价者回复
-  reply: {
-    type: Array,
-    default: []
+  // reply: {
+  //   type: Array,
+  //   default: []
+  // },
+  replys: [{
+    type: Schema.Types.ObjectId,
+    ref: 'reply',
+    autopopulate: true
+  }],
+  // 回复数
+  reply_count: {
+    type: Number,
+    default: 0
   },
   // 点赞数
   like: {
@@ -64,6 +78,7 @@ let CommentSchema = new Schema({
   },
 });
 
+CommentSchema.plugin(autopopulate);
 CommentSchema.plugin(autoIncrement.plugin, {
   model: 'comment',
   field: 'id',

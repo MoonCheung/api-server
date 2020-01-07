@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2020-01-02 16:45:08
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-04 14:31:44
+ * @LastEditTime: 2020-01-07 23:44:40
  */
 
 const autoIncrement = require('mongoose-auto-increment');
@@ -17,8 +17,11 @@ let CountersSchema = new Schema({
 });
 
 let ReplySchema = new Schema({
-  // 父评论id，即父亲的id
-  comment_id: Number,
+  // 父评论id
+  comment_id: {
+    type: Number,
+    ref: 'comment'
+  },
   // 主键id
   id: {
     type: Number,
