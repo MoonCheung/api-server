@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-01 16:20:33
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-08 00:19:06
+ * @LastEditTime: 2020-01-08 00:50:43
  */
 
 const autoIncrement = require("mongoose-auto-increment");
@@ -39,7 +39,7 @@ let ArticleSchema = new Schema({
   comments: [{
     type: Schema.Types.ObjectId,
     ref: 'comment',
-    autopopulate: { select: 'reply_count -_id' }
+    autopopulate: { select: '-_id-__v', options: { sort: { id: -1 } } }
   }],
   // 评论数
   cmt_count: {

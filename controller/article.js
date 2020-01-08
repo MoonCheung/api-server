@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-22 01:59:31
+ * @LastEditTime: 2020-01-08 02:02:24
  */
 
 const article = require("../models/article");
@@ -15,9 +15,8 @@ const article = require("../models/article");
  */
 async function insertArticle(ctx) {
   try {
-    let { title, desc, banner, tag, content, catg } = ctx.request.body;
-    await article
-      .create({
+    const { title, desc, banner, tag, content, catg } = ctx.request.body;
+    await article.create({
         title,
         desc,
         banner,
@@ -96,7 +95,7 @@ async function articleList(ctx) {
  */
 async function editArticle(ctx) {
   try {
-    let { id, title, desc, banner, tag, content, catg } = ctx.request.body;
+    const { id, title, desc, banner, tag, content, catg } = ctx.request.body;
     await article
       .updateOne({
         id: id
@@ -132,7 +131,7 @@ async function editArticle(ctx) {
  */
 async function getArtDetl(ctx) {
   try {
-    let { id } = ctx.request.body;
+    const { id } = ctx.request.body;
     let ArtDetlData = await article.findOne({
       id: id
     }, {
@@ -160,7 +159,7 @@ async function getArtDetl(ctx) {
  */
 async function delArticle(ctx) {
   try {
-    let { id } = ctx.request.body;
+    const { id } = ctx.request.body;
     await article
       .deleteOne({
         id: id
@@ -187,7 +186,7 @@ async function delArticle(ctx) {
  */
 async function chgArtStatus(ctx) {
   try {
-    let { id, status } = ctx.request.body;
+    const { id, status } = ctx.request.body;
     await article
       .updateOne({
         id: id
@@ -552,7 +551,8 @@ async function fetchAllArt(ctx) {
           catg: "$catg",
           pv: "$pv",
           like: "$like",
-          comment: "$comment",
+          comments: '$comments',
+          cmt_count: '$cmt_count',
           cdate: {
             $dateToString: {
               format: "%Y年%m月%d日",
@@ -560,6 +560,26 @@ async function fetchAllArt(ctx) {
             }
           },
           _id: 0
+        }
+      },
+      {
+        $lookup: {
+          from: "comments",
+          let: { parentArtId: '$id' },
+          pipeline: [{
+            $match: {
+              $expr: {
+                $eq: ["$artId", "$$parentArtId"]
+              }
+            }
+          }, {
+            $project: {
+              reply_count: 1,
+              id: 1,
+              _id: 0,
+            }
+          }],
+          as: "comments"
         }
       },
       { $skip: page },
