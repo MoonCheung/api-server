@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:51:06
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-03 17:19:46
+ * @LastEditTime: 2020-01-08 00:56:14
  */
 
 const Router = require("koa-router");
@@ -106,8 +106,6 @@ router.post('/tag/fetchappttag', tags.fetchApptTag);
 router.get('/art/fetchartarch', article.fetchArtArch);
 // 添加评论API
 router.post('/cmt/fetchaddcmt', comment.fetchAddComment);
-// 获取评论列表API
-router.post('/cmt/fetchcmt', comment.fetchComment);
 // 添加回复评论API
 router.post('/cmt/addreplycmt', comment.addReplyComment);
 // 添加子回复评论API

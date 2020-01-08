@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-25 23:17:40
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-03 17:19:43
+ * @LastEditTime: 2020-01-08 00:56:08
  */
 
 const whitelist = [
@@ -27,7 +27,6 @@ const whitelist = [
   /^\/api\/tag\/fetchappttag/,
   /^\/api\/art\/fetchartarch/,
   /^\/api\/cmt\/fetchaddcmt/,
-  /^\/api\/cmt\/fetchcmt/,
   /^\/api\/cmt\/addreplycmt/,
   /^\/api\/cmt\/addsubreply/,
 ];
