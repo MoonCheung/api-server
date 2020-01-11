@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-08 02:02:24
+ * @LastEditTime: 2020-01-09 16:41:54
  */
 
 const article = require("../models/article");
@@ -756,6 +756,56 @@ async function fetchArtArch(ctx) {
   }
 }
 
+/**
+ * 点赞文章详情接口API
+ * @param {*} ctx
+ */
+async function updLikeAtrPage(ctx) {
+  try {
+    const { id } = ctx.params;
+    await article.where({
+      status: 1
+    }).findOneAndUpdate({
+      id
+    }, {
+      // $inc运算符按指定值递增
+      $inc: {
+        like: 1
+      }
+    }, {
+      projection: {
+        __v: 0,
+        _id: 0,
+        tag: 0,
+        pv: 0,
+        status: 0,
+        comments: 0,
+        cmt_count: 0,
+        title: 0,
+        desc: 0,
+        banner: 0,
+        content: 0,
+        catg: 0,
+        cdate: 0
+      },
+      new: true
+    }).then(result => {
+      ctx.body = {
+        code: 1,
+        error: 0,
+        result,
+        msg: "点赞文章详情成功"
+      }
+    });
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "点赞文章详情失败",
+      err
+    }
+  }
+}
+
 module.exports = {
   insertArticle,
   articleList,
@@ -772,5 +822,6 @@ module.exports = {
   fetchAllArt,
   fetchArtDeil,
   fetchHotArt,
-  fetchArtArch
+  fetchArtArch,
+  updLikeAtrPage
 };

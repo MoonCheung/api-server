@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 22:16:32
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-08 00:55:18
+ * @LastEditTime: 2020-01-11 18:57:51
  */
 
 const commentModel = require('../models/comment');
@@ -243,8 +243,77 @@ async function addSubReplyComment(ctx) {
   }
 }
 
+/**
+ * 点赞评论API
+ * @param {*} ctx
+ */
+async function updLikeComment(ctx) {
+  try {
+    const { id, type } = ctx.params;
+    switch (type) {
+      case 'comment':
+        await commentModel.findOneAndUpdate({
+          id
+        }, {
+          // $inc运算符按指定值递增
+          $inc: {
+            like: 1
+          }
+        }, {
+          projection: {
+            _id: 0,
+            replys: 0,
+            id: 1,
+            like: 1
+          },
+          new: true
+        }).then(result => {
+          ctx.body = {
+            code: 1,
+            error: 0,
+            result,
+            msg: "点赞评论成功",
+          }
+        })
+        break;
+      case 'reply':
+        await replyModel.findOneAndUpdate({
+          id
+        }, {
+          // $inc运算符按指定值递增
+          $inc: {
+            like: 1
+          }
+        }, {
+          projection: {
+            _id: 0,
+            id: 1,
+            like: 1,
+            comment_id: 1
+          },
+          new: true
+        }).then(result => {
+          ctx.body = {
+            code: 1,
+            error: 0,
+            result,
+            msg: "点赞评论成功",
+          }
+        })
+        break;
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "点赞评论失败",
+      err
+    }
+  }
+}
+
 module.exports = {
   fetchAddComment,
   addReplyComment,
-  addSubReplyComment
+  addSubReplyComment,
+  updLikeComment
 };
