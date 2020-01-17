@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:33:34
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-20 01:10:15
+ * @LastEditTime: 2020-01-17 23:38:06
  */
 
 const tagModel = require("../models/tag");
@@ -259,47 +259,36 @@ async function fetchApptTag(ctx) {
   try {
     let data = ctx.request.body;
     let page = parseInt(data.page * 5);
-    let result = await article.aggregate([{
-        $match: {
-          status: 1,
-          tag: data.tag
-        }
-      },
-      {
-        $project: {
-          id: "$id",
-          title: "$title",
-          desc: "$desc",
-          banner: "$banner",
-          catg: "$catg",
-          pv: "$pv",
-          like: "$like",
-          comment: "$comment",
-          cdate: {
-            $dateToString: {
-              format: "%Y年%m月%d日",
-              date: "$cdate"
-            }
-          },
-          _id: 0
-        }
-      },
-      { $skip: page },
-      {
-        $limit: 5
-      },
-      {
-        $sort: {
-          id: -1 //降序排列
-        }
+    await article.find({
+      tag: data.tag
+    }, {
+      _id: 0,
+      id: 1,
+      title: 1,
+      desc: 1,
+      banner: 1,
+      catg: 1,
+      pv: 1,
+      like: 1,
+      comments: 1,
+      cmt_count: 1,
+      cdate: 1,
+    }, {
+      skip: page,
+      limit: 5,
+      sort: {
+        id: -1 //降序排列
       }
-    ])
-    ctx.body = {
-      code: 1,
-      error: 0,
-      msg: "获取指定标签文章成功",
-      result
-    };
+    }).where({
+      status: 1
+    }).then(result => {
+      ctx.body = {
+        code: 1,
+        error: 0,
+        msg: "获取指定标签文章成功",
+        result
+      };
+    })
   } catch (err) {
     ctx.body = {
       error: 1,
