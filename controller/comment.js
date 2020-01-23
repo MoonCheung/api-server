@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 22:16:32
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-11 18:57:51
+ * @LastEditTime: 2020-01-23 18:41:49
  */
 
 const commentModel = require('../models/comment');
@@ -33,7 +33,7 @@ function getAvatars(param) {
 async function fetchAddComment(ctx) {
   try {
     const ua = ctx.userAgent.source
-    const ip = ctx.request.headers['x-real-ip'] || '120.206.210.25';
+    const ip = ctx.request.headers['x-real-ip'] || '';
     const { id, name, email, site, content } = ctx.request.body;
 
     await commentModel.create({
@@ -98,7 +98,7 @@ async function addReplyComment(ctx) {
   try {
     const { replyId, name, email, site, content } = ctx.request.body;
     const ua = ctx.userAgent.source
-    const ip = ctx.request.headers['x-real-ip'] || '120.206.210.25';
+    const ip = ctx.request.headers['x-real-ip'] || '';
 
     let cmtData = await commentModel.findOne({
       id: replyId
@@ -171,7 +171,7 @@ async function addSubReplyComment(ctx) {
   try {
     const { replyId, subReplyId, name, email, site, content } = ctx.request.body;
     const ua = ctx.userAgent.source
-    const ip = ctx.request.headers['x-real-ip'] || '120.206.210.25';
+    const ip = ctx.request.headers['x-real-ip'] || '';
 
     let findData = await replyModel.findOne({
       id: subReplyId
