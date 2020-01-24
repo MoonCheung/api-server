@@ -20,53 +20,25 @@ const router = require("./routes");
 
 onerror(app);
 
-// 导航路由中间件
-app.use(async (ctx, next) => {
-  let allowedOrigins = [
-    "http://www.ikmoons.com",
-    "http://api.ikmoons.com",
-    "http://admin.ikmoons.com",
-    "file://"
-  ];
-  let origin = ctx.request.origin;
-  if (allowedOrigins.includes(origin) || origin.includes("localhost")) {
-    ctx.set("Access-Control-Allow-Origin", origin);
-    if (ctx.url.match(/^((?!\/api).)*$/)) {
-      ctx.body = CONFIG.INFO;
-    }
-  }
-
-  ctx.set({
-    "Access-Control-Allow-Headers": "Authorization, Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With",
-    "Access-Control-Allow-Methods": "PUT,PATCH,POST,GET,DELETE,OPTIONS",
-    "Access-Control-Max-Age": "1728000",
-    "Content-Type": "application/json;charset=utf-8"
-  });
-
-  //OPTIONS
-  if (ctx.request.method == "OPTIONS") {
-    //默认输出'get'
-    ctx.status = 200;
-    return false;
-  }
-
-  await next();
-});
-
 // 用户代理解析器
 app.use(userAgent());
 
-// token错误处理
-app.use((ctx, next) =>
-  next().catch(err => {
-    if (err.status === 401) {
+// 导航路由状态
+app.use(async (ctx, next) => {
+  const regex = /^((?!\/api).)*$/;
+  if (regex.test(ctx.url)) {
+    ctx.body = CONFIG.INFO;
+  }
+  await next().catch(err => {
+    if (err.message === 'Authentication Error') {
       ctx.status = 401;
-      ctx.body = "token已过期,请重新登陆";
-    } else {
-      throw err;
+      ctx.body = {
+        status: "error",
+        msg: '身份验证错误且token已过期，请重新登陆',
+      }
     }
-  })
-);
+  });
+});
 
 app.use(
   jwt({
