@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-25 22:07:42
+ * @LastEditTime: 2020-01-24 14:21:15
  */
 
 module.exports = {
@@ -50,7 +50,7 @@ module.exports = {
         email: "salvador23@163.com"
       },
       github: "https://github.com/MoonCheung",
-      powered: ["Vue", "mpvue", "Node.js", "Koa", "MongoDB", "Nginx"]
+      powered: ["Vue", "Nuxt.js", "mpvue", "Node.js", "Koa", "MongoDB", "Mongoose", "Nginx"]
     }
   },
   // gravatar 配置
