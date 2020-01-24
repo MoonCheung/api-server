@@ -25,6 +25,7 @@ The node server provides RESTful api for application services based on koa
 
   - 分类
   - 标签
+  - 评论
   - 系统: `system`引入`os` node 模块,返回操作系统信息
   - 文章: `article`含有分别后台管理控制器,小程序控制器
   - 用户: `user`引入`jsonwebtoken`,`md5`npm 包,配置用户同步 token 令牌实现,而且密码进行 MD5 加密
@@ -38,6 +39,8 @@ The node server provides RESTful api for application services based on koa
 - 业务模块 ([models](https://github.com/MoonCheung/node-server/tree/master/models))
 
   - 文章
+  - 评论
+  - 回复
   - 分类
   - 标签
   - 用户
