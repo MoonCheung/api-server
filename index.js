@@ -36,6 +36,8 @@ app.use(async (ctx, next) => {
         status: "error",
         msg: '身份验证错误且token已过期，请重新登陆',
       }
+    } else {
+      throw err;
     }
   });
 });
