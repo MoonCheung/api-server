@@ -1,11 +1,15 @@
 /*
- * @Description: 配置
+ * @Description: app 配置
  * @Author: MoonCheung
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-24 14:21:15
+ * @LastEditTime: 2020-02-03 11:40:39
  */
+
+const bash = require('../bash.js');
+// NOTE: bash.js文件主要密钥，密码用来解析，而且需要你自己拥有这些才可以
+const argv = require('yargs').config(bash).argv;
 
 module.exports = {
   // process.env属性返回一个包含用户环境信息的对象 See environ(7).
@@ -21,12 +25,17 @@ module.exports = {
     renew: false
   },
   // mongodb数据库集合文档
-  mongodb: "mongodb://127.0.0.1:27017/Blogs",
+  mongodb: {
+    url: "mongodb://127.0.0.1:27017/Blogs",
+    auth: argv.mongo_auth,
+    user: argv.mongo_user,
+    pass: argv.mongo_pass
+  },
   // 七牛配置
   QINIU: {
     Bucket: "blogs",
-    AccessKey: "3mY5Q8NhEo8ZHKg6z8crZdAPkimD3cxG3y4wwvif",
-    SecretKey: "qytWalGJgnjQGyyFr80mD80uKCpMIugI4qK3zR2B"
+    AccessKey: argv.qn_AccessKey || 'your access key',
+    SecretKey: argv.qn_SecretKey || 'your secret key'
   },
   // jwtToken
   jwtToken: {
@@ -37,6 +46,11 @@ module.exports = {
     url: "http://data.zz.baidu.com",
     site: "www.ikmoons.com",
     token: "**************"
+  },
+  // IP归属地配置
+  GEOIP: {
+    SecretID: argv.ip_secretId || 'your secret id',
+    SecretKey: argv.ip_secretKey || 'your secret key'
   },
   // node服务器信息
   INFO: {
