@@ -4,27 +4,18 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 18:17:53
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-13 11:34:28
+ * @LastEditTime: 2020-02-03 11:52:41
  */
 
 const autoIncrement = require("mongoose-auto-increment");
+const envMap = require('../config/env.config');
 const mongoose = require("mongoose");
 const chalk = require("chalk");
-//导入config配置
 const CONFIG = require("../config");
 const success = chalk.bold.blue;
 const error = chalk.bold.red;
 
-const db = mongoose.createConnection(`${CONFIG.mongodb}`, {
-  // 此选项表示设置为 authenticationDatabase to admin
-  // auth:{"authSource": "admin"},
-  // user: "****",
-  // pass: "****",
-  keepAlive: true,
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false
-});
+const db = mongoose.createConnection(`${CONFIG.mongodb.url}`, envMap);
 
 autoIncrement.initialize(db);
 
