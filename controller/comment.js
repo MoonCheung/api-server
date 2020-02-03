@@ -4,15 +4,15 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 22:16:32
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-23 18:41:49
+ * @LastEditTime: 2020-02-03 15:25:19
  */
 
 const commentModel = require('../models/comment');
 const articleModel = require('../models/article');
 const replyModel = require('../models/reply');
+const queryIpInfo = require("../utils/geoip");
 const gravatar = require('gravatar');
 const CONFIG = require('../config');
-const md = require('markdown-it')();
 const geoip = require('geoip-lite');
 const md5 = require('md5');
 
@@ -35,6 +35,7 @@ async function fetchAddComment(ctx) {
     const ua = ctx.userAgent.source
     const ip = ctx.request.headers['x-real-ip'] || '';
     const { id, name, email, site, content } = ctx.request.body;
+    const getGeoip = await queryIpInfo(ip);
 
     await commentModel.create({
       artId: id,
@@ -44,7 +45,7 @@ async function fetchAddComment(ctx) {
       from_avatar: getAvatars(email),
       from_content: content,
       from_ip: ip,
-      from_locate: geoip.lookup(ip),
+      from_locate: getGeoip,
       from_ua: ua
     }).then(cmtData => {
       articleModel.findOneAndUpdate({
@@ -72,6 +73,7 @@ async function fetchAddComment(ctx) {
         from_locate: cmtData.from_locate,
         from_ua: cmtData.from_ua,
         replys: cmtData.replys,
+        reply_count: cmtData.reply_count,
         from_date: cmtData.from_date
       }
       ctx.body = {
@@ -99,6 +101,7 @@ async function addReplyComment(ctx) {
     const { replyId, name, email, site, content } = ctx.request.body;
     const ua = ctx.userAgent.source
     const ip = ctx.request.headers['x-real-ip'] || '';
+    const getGeoip = await queryIpInfo(ip);
 
     let cmtData = await commentModel.findOne({
       id: replyId
@@ -115,7 +118,7 @@ async function addReplyComment(ctx) {
         from_webSite: site,
         from_avatar: getAvatars(email),
         from_content: content,
-        from_locate: geoip.lookup(ip),
+        from_locate: getGeoip,
         from_ua: ua
       }).then(replyData => {
         commentModel.findOneAndUpdate({
@@ -172,6 +175,7 @@ async function addSubReplyComment(ctx) {
     const { replyId, subReplyId, name, email, site, content } = ctx.request.body;
     const ua = ctx.userAgent.source
     const ip = ctx.request.headers['x-real-ip'] || '';
+    const getGeoip = await queryIpInfo(ip);
 
     let findData = await replyModel.findOne({
       id: subReplyId
@@ -190,7 +194,7 @@ async function addSubReplyComment(ctx) {
         from_webSite: site,
         from_avatar: getAvatars(email),
         from_content: content,
-        from_locate: geoip.lookup(ip),
+        from_locate: getGeoip,
         from_ua: ua,
         to_id: subReplyId,
         to_user: findData.from_user,
