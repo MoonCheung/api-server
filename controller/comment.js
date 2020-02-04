@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 22:16:32
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-03 15:25:19
+ * @LastEditTime: 2020-02-04 14:13:38
  */
 
 const commentModel = require('../models/comment');
@@ -33,9 +33,18 @@ function getAvatars(param) {
 async function fetchAddComment(ctx) {
   try {
     const ua = ctx.userAgent.source
-    const ip = ctx.request.headers['x-real-ip'] || '';
+    const ip = ctx.request.headers['x-real-ip'] || '127.0.0.1';
     const { id, name, email, site, content } = ctx.request.body;
     const getGeoip = await queryIpInfo(ip);
+    let ip_location = null;
+    if (getGeoip !== []) {
+      ip_location = {
+        city: getGeoip.city,
+        country: getGeoip.country
+      }
+    } else {
+      ip_location = geoip.lookup(ip);
+    }
 
     await commentModel.create({
       artId: id,
@@ -45,7 +54,7 @@ async function fetchAddComment(ctx) {
       from_avatar: getAvatars(email),
       from_content: content,
       from_ip: ip,
-      from_locate: getGeoip,
+      from_locate: ip_location,
       from_ua: ua
     }).then(cmtData => {
       articleModel.findOneAndUpdate({
@@ -80,7 +89,7 @@ async function fetchAddComment(ctx) {
         code: 1,
         error: 0,
         result,
-        msg: "添加评论成功",
+        msg: "添加评论成功"
       }
     })
   } catch (err) {
@@ -100,8 +109,17 @@ async function addReplyComment(ctx) {
   try {
     const { replyId, name, email, site, content } = ctx.request.body;
     const ua = ctx.userAgent.source
-    const ip = ctx.request.headers['x-real-ip'] || '';
+    const ip = ctx.request.headers['x-real-ip'] || '127.0.0.1';
     const getGeoip = await queryIpInfo(ip);
+    let ip_location = null
+    if (getGeoip !== []) {
+      ip_location = {
+        city: getGeoip.city,
+        country: getGeoip.country
+      }
+    } else {
+      ip_location = geoip.lookup(ip);
+    }
 
     let cmtData = await commentModel.findOne({
       id: replyId
@@ -118,7 +136,7 @@ async function addReplyComment(ctx) {
         from_webSite: site,
         from_avatar: getAvatars(email),
         from_content: content,
-        from_locate: getGeoip,
+        from_locate: ip_location,
         from_ua: ua
       }).then(replyData => {
         commentModel.findOneAndUpdate({
@@ -153,7 +171,7 @@ async function addReplyComment(ctx) {
           code: 1,
           error: 0,
           result,
-          msg: "添加回复评论成功",
+          msg: "添加回复评论成功"
         }
       })
     }
@@ -174,8 +192,17 @@ async function addSubReplyComment(ctx) {
   try {
     const { replyId, subReplyId, name, email, site, content } = ctx.request.body;
     const ua = ctx.userAgent.source
-    const ip = ctx.request.headers['x-real-ip'] || '';
+    const ip = ctx.request.headers['x-real-ip'] || '127.0.0.1';
     const getGeoip = await queryIpInfo(ip);
+    let ip_location = null
+    if (getGeoip !== []) {
+      ip_location = {
+        city: getGeoip.city,
+        country: getGeoip.country
+      }
+    } else {
+      ip_location = geoip.lookup(ip);
+    }
 
     let findData = await replyModel.findOne({
       id: subReplyId
@@ -194,7 +221,7 @@ async function addSubReplyComment(ctx) {
         from_webSite: site,
         from_avatar: getAvatars(email),
         from_content: content,
-        from_locate: getGeoip,
+        from_locate: ip_location,
         from_ua: ua,
         to_id: subReplyId,
         to_user: findData.from_user,
@@ -234,7 +261,7 @@ async function addSubReplyComment(ctx) {
           code: 1,
           error: 0,
           result,
-          msg: "添加子回复评论成功",
+          msg: "添加子回复评论成功"
         }
       })
     }
@@ -276,7 +303,7 @@ async function updLikeComment(ctx) {
             code: 1,
             error: 0,
             result,
-            msg: "点赞评论成功",
+            msg: "点赞评论成功"
           }
         })
         break;
@@ -301,7 +328,7 @@ async function updLikeComment(ctx) {
             code: 1,
             error: 0,
             result,
-            msg: "点赞评论成功",
+            msg: "点赞评论成功"
           }
         })
         break;
