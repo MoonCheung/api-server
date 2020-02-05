@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <!-- The character set should be utf-8 -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width" />
+</head>
+
+<body>
+  <div class="email-wrap">
+    <table class="email-body">
+      <thead class="head">
+        <tr>
+          <td colspan="2">
+            <h4 class="head-title">你在&nbsp;<a href="https://www.ikmoons.com/" target="_blank" alt="blog">MoonCheung</a>&nbsp;博客的评论有了新的回复</h4>
+          </td>
+        </tr>
+      </thead>
+      <tbody class="body">
+        <tr class="header">
+          <td class="head-left">
+            <div class="left-wrap">
+              <img class="head-avatar" src="https://static.ikmoons.com/头像.png" alt="avatar" />
+              <span class="head-text">MoonCheung</span>
+            </div>
+          </td>
+          <td class="head-right">
+            <time><%= date %></time>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="content">
+            <div class="markdown"><%- param.content %></div>
+          </td>
+        </tr>
+        <tr>
+          <td class="link" colspan="2"><a class="btn-link" href="https://www.ikmoons.com/article/<%= param.id %>" target="_blank" alt="blog">回复</a></td>
+        </tr>
+      </tbody>
+      <tfoot class="footer">
+        <tr>
+          <td colspan="2">
+            <p class="foot-text">感谢你对&nbsp;MoonCheung&nbsp;的关注，如有疑问，请前往博客留言，我会尽快回复</p>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <p class="foot-text">(此邮件由系统自动发送，请勿直接回复！)</p>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</body>
+
+</html>
+<style>
+  html,
+  body {
+    font-size: 14px;
+  }
+
+  .email-wrap {
+    padding: 2rem;
+    overflow: hidden;
+    background-color: #ebedf0;
+  }
+
+  .email-body {
+    margin: 0 auto;
+    overflow: hidden;
+    max-width: 46rem;
+    border-radius: 0.143rem;
+    padding: 0 1rem 1rem 1rem;
+    background-color: #f9f9f9;
+  }
+
+  .head>tr>td {
+    border-bottom: 0.071rem solid #dcdfe6;
+  }
+
+  .head-title {
+    margin: 0.714rem;
+    text-align: center;
+  }
+
+  .head-title>a {
+    color: #3298dc;
+    text-decoration: none;
+    -moz-text-decoration: none;
+    -webkit-text-decoration: none;
+  }
+
+  .head-title>a:active,
+  .head-title>a:visited {
+    color: #3298dc;
+  }
+
+  .head-left {
+    padding: 0.429rem 0;
+  }
+
+  .head-left>.left-wrap {
+    display: inline-flex;
+    flex-flow: row wrap;
+    align-items: center;
+  }
+
+  .left-wrap>.head-avatar {
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+  }
+
+  .left-wrap>.head-text {
+    margin-left: 0.714rem;
+    font-weight: 400;
+  }
+
+  .head-right {
+    text-align: right;
+    font-size: 0.75rem;
+  }
+
+  .content>.markdown {
+    padding: 1.429rem;
+    color: #757575;
+    margin-bottom: 1rem;
+    border-radius: 0.143rem;
+    background-color: #dbdbdb;
+  }
+
+  .link {
+    padding: 0.429rem 0;
+  }
+
+  .link>.btn-link {
+    width: 30px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0.429rem;
+    text-decoration: none;
+    -moz-text-decoration: none;
+    -webkit-text-decoration: none;
+    border-radius: 0.143rem;
+    background-color: #3298dc;
+    border-color: transparent;
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .footer {
+    font-size: 0.75rem;
+  }
+
+  .footer>tr>td>.foot-text {
+    margin-bottom: 0;
+  }
+</style>

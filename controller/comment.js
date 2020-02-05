@@ -4,13 +4,15 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 22:16:32
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-04 14:13:38
+ * @LastEditTime: 2020-02-05 20:07:48
  */
 
 const commentModel = require('../models/comment');
 const articleModel = require('../models/article');
 const replyModel = require('../models/reply');
 const queryIpInfo = require("../utils/geoip");
+const sendMails = require('../utils/email');
+const parseMark = require('../utils/markdown');
 const gravatar = require('gravatar');
 const CONFIG = require('../config');
 const geoip = require('geoip-lite');
@@ -71,7 +73,7 @@ async function fetchAddComment(ctx) {
         upsert: true,
         setDefaultsOnInsert: true
       }).then(res => {
-        return res;
+        // console.info('添加到评论数组成功', res);
       });
       let result = {
         id: cmtData.id,
@@ -125,8 +127,26 @@ async function addReplyComment(ctx) {
       id: replyId
     }, {
       _id: 0,
-      id: 1
+      id: 1,
+      artId: 1,
+      from_user: 1,
+      from_email: 1
     });
+
+    // 发送邮件配置
+    const param = {
+      id: cmtData.artId,
+      name,
+      email,
+      to_name: cmtData.from_user,
+      to_email: cmtData.from_email,
+      content: parseMark.render(content)
+    }
+    const appEmail = CONFIG.INFO.result.author.email;
+    if (appEmail.includes(email.trim())) {
+      sendMails(param);
+    }
+
     let commentId = cmtData.id.toString();
     if (Object.is(commentId, replyId)) {
       await replyModel.create({
@@ -153,7 +173,7 @@ async function addReplyComment(ctx) {
           upsert: true,
           setDefaultsOnInsert: true
         }).then(res => {
-          return res;
+          // console.info('添加到回复数组成功', res);
         })
         let result = {
           parentId: replyData.comment_id,
@@ -241,7 +261,20 @@ async function addSubReplyComment(ctx) {
           upsert: true,
           setDefaultsOnInsert: true
         }).then(res => {
-          return res;
+          // 发送邮件配置
+          const param = {
+            id: res.artId,
+            name,
+            email,
+            to_name: findData.from_user,
+            to_email: findData.from_email,
+            content: parseMark.render(content)
+          }
+          const appEmail = CONFIG.INFO.result.author.email;
+          if (appEmail.includes(email.trim())) {
+            sendMails(param);
+          }
+          // console.info('添加到回复数组成功', res);
         })
         let result = {
           parentId: replyData.comment_id,

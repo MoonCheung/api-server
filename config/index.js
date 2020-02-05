@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-03 11:40:39
+ * @LastEditTime: 2020-02-04 20:15:31
  */
 
 const bash = require('../bash.js');
@@ -51,6 +51,13 @@ module.exports = {
   GEOIP: {
     SecretID: argv.ip_secretId || 'your secret id',
     SecretKey: argv.ip_secretKey || 'your secret key'
+  },
+  // SMTP邮件配置
+  EMAIL: {
+    host: 'smtp.163.com',
+    port: 465,
+    user: argv.mail_user || 'your mail user',
+    pass: argv.mail_pass || 'your mail pass',
   },
   // node服务器信息
   INFO: {
