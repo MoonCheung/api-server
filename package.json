@@ -1,6 +1,6 @@
 {
   "name": "node-server",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "🤔 My Node Server Project",
   "main": "index.js",
   "scripts": {

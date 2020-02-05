@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-06 00:27:46
+ * @LastEditTime: 2020-02-06 01:54:30
  */
 
 const bash = require('../bash.js');
@@ -64,7 +64,7 @@ module.exports = {
     msg: "数据请求成功!",
     result: {
       name: "node-server",
-      version: "1.0.0",
+      version: "1.3.0",
       author: {
         name: "MoonCheung",
         email: "salvador23@163.com"
