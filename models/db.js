@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 18:17:53
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-03 11:52:41
+ * @LastEditTime: 2020-02-03 16:24:20
  */
 
 const autoIncrement = require("mongoose-auto-increment");

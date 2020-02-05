@@ -4,11 +4,11 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-15 23:18:04
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-08 22:31:20
+ * @LastEditTime: 2020-02-03 11:27:40
  */
 
 const qiniu = require("qiniu");
-const CONFIG = require("../config/index");
+const CONFIG = require("../config");
 
 // 创建上传之前需要两个凭证
 const accessKey = CONFIG.QINIU.AccessKey;

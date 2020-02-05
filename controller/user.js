@@ -4,11 +4,11 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 22:01:54
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-08 22:30:51
+ * @LastEditTime: 2020-02-03 11:28:42
  */
 
 const UserModel = require("../models/user");
-const config = require("../config");
+const CONFIG = require("../config");
 const jwt = require("jsonwebtoken");
 const md5 = require("md5");
 
@@ -34,7 +34,7 @@ async function login(ctx) {
               _id: userInfo._id
             }
           },
-          config.jwtToken.PrivateKey, {
+          CONFIG.jwtToken.PrivateKey, {
             expiresIn: "2h" //2个小时到期
           }
         );
