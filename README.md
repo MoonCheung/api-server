@@ -51,6 +51,7 @@ The node server provides RESTful api for application services based on koa
   - `email.js`: 发评论邮件
   - `geoip.js`: ip 地址查询
   - `markdown.js`: 解析 markdown
+  - `baiduseo.js`: 百度 SEO 推送
 
 ## 执行命令
 

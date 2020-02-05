@@ -4,10 +4,11 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-09 16:41:54
+ * @LastEditTime: 2020-02-06 01:48:24
  */
 
 const article = require("../models/article");
+const { baiduSeoPush, baiduSeoUpdate, baiduSeoDel } = require('../utils/baiduseo');
 
 /**
  * 添加文章接口 API
@@ -17,20 +18,20 @@ async function insertArticle(ctx) {
   try {
     const { title, desc, banner, tag, content, catg } = ctx.request.body;
     await article.create({
-        title,
-        desc,
-        banner,
-        tag,
-        content,
-        catg
-      })
-      .then(() => {
-        ctx.body = {
-          code: 1,
-          error: 0,
-          msg: "添加文章成功"
-        };
-      });
+      title,
+      desc,
+      banner,
+      tag,
+      content,
+      catg
+    }).then(res => {
+      baiduSeoPush(res.id)
+      ctx.body = {
+        code: 1,
+        error: 0,
+        msg: "添加文章成功"
+      };
+    });
   } catch (err) {
     ctx.body = {
       error: 1,
@@ -96,26 +97,25 @@ async function articleList(ctx) {
 async function editArticle(ctx) {
   try {
     const { id, title, desc, banner, tag, content, catg } = ctx.request.body;
-    await article
-      .updateOne({
-        id: id
-      }, {
-        $set: {
-          title,
-          desc,
-          banner,
-          tag,
-          content,
-          catg
-        }
-      })
-      .then(() => {
-        ctx.body = {
-          code: 1,
-          error: 0,
-          msg: "编辑文章成功"
-        };
-      });
+    await article.findOneAndUpdate({
+      id: id
+    }, {
+      $set: {
+        title,
+        desc,
+        banner,
+        tag,
+        content,
+        catg
+      }
+    }, {}, function(err, res) {
+      baiduSeoUpdate(res.id);
+      ctx.body = {
+        code: 1,
+        error: 0,
+        msg: "编辑文章成功"
+      };
+    })
   } catch (err) {
     ctx.body = {
       error: 1,
@@ -160,17 +160,15 @@ async function getArtDetl(ctx) {
 async function delArticle(ctx) {
   try {
     const { id } = ctx.request.body;
-    await article
-      .deleteOne({
-        id: id
-      })
-      .then(() => {
-        ctx.body = {
-          code: 1,
-          error: 0,
-          msg: "删除文章成功"
-        };
-      });
+    await article.findOne({ id }, { id: 1 }, function(err, res) {
+      baiduSeoDel(res.id);
+    })
+    await article.deleteOne({ id: id })
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "删除文章成功"
+    };
   } catch (err) {
     ctx.body = {
       error: 1,
@@ -187,21 +185,19 @@ async function delArticle(ctx) {
 async function chgArtStatus(ctx) {
   try {
     const { id, status } = ctx.request.body;
-    await article
-      .updateOne({
-        id: id
-      }, {
-        $set: {
-          status
-        }
-      })
-      .then(() => {
-        ctx.body = {
-          code: 1,
-          error: 0,
-          msg: "改变文章状态成功"
-        };
-      });
+    await article.updateOne({
+      id: id
+    }, {
+      $set: {
+        status
+      }
+    }).then(() => {
+      ctx.body = {
+        code: 1,
+        error: 0,
+        msg: "改变文章状态成功"
+      };
+    });
   } catch (err) {
     ctx.body = {
       error: 1,

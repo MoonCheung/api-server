@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-04 20:15:31
+ * @LastEditTime: 2020-02-06 00:27:46
  */
 
 const bash = require('../bash.js');
@@ -43,9 +43,8 @@ module.exports = {
   },
   // 百度推送
   BAIDU: {
-    url: "http://data.zz.baidu.com",
-    site: "www.ikmoons.com",
-    token: "**************"
+    site: argv.baidu_site || 'your baidu seo',
+    token: argv.baidu_token || 'your baidu token'
   },
   // IP归属地配置
   GEOIP: {
