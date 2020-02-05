@@ -46,7 +46,7 @@ The node server provides RESTful api for application services based on koa
   - 用户
   - 配置
 
-- 工具 ([models](https://github.com/MoonCheung/node-server/tree/master/utils))
+- 工具 ([utils](https://github.com/MoonCheung/node-server/tree/master/utils))
 
   - `email.js`: 发评论邮件
   - `geoip.js`: ip 地址查询
