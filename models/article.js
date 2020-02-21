@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-01 16:20:33
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-08 00:50:43
+ * @LastEditTime: 2020-02-21 15:00:49
  */
 
 const autoIncrement = require("mongoose-auto-increment");
@@ -55,6 +55,12 @@ let ArticleSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  // 文章转载状态 => 0 原创，1 转载，2 混合
+  origin: {
+    type: Number,
+    default: 0
+  },
+  // 文章公开状态 => 0 密码， 1 公开
   status: {
     type: Number,
     default: 1
