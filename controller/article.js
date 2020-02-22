@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-06 01:48:24
+ * @LastEditTime: 2020-02-22 16:40:26
  */
 
 const article = require("../models/article");
@@ -802,6 +802,48 @@ async function updLikeAtrPage(ctx) {
   }
 }
 
+/**
+ * 搜索关键词接口API
+ * @param {*} ctx
+ */
+async function fetchArtKeyWord(ctx) {
+  try {
+    const data = ctx.request.body;
+    const page = parseInt(data.page * 5);
+    await article.find({
+      // $regex 为正则匹配实现模糊查询，$options为不区分大小写
+      title: { $regex: data.keyword, $options: 'i' }
+    }, {
+      __v: 0,
+      _id: 0,
+      tag: 0,
+      status: 0,
+      content: 0
+    }, {
+      skip: page,
+      limit: 5,
+      sort: {
+        id: -1 //降序排列
+      }
+    }).where({
+      status: 1
+    }).then(result => {
+      ctx.body = {
+        code: 1,
+        error: 0,
+        result,
+        msg: "搜索关键字成功"
+      }
+    })
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "搜索关键字失败",
+      err
+    }
+  }
+}
+
 module.exports = {
   insertArticle,
   articleList,
@@ -819,5 +861,6 @@ module.exports = {
   fetchArtDeil,
   fetchHotArt,
   fetchArtArch,
-  updLikeAtrPage
+  updLikeAtrPage,
+  fetchArtKeyWord
 };

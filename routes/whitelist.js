@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-25 23:17:40
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-24 00:40:51
+ * @LastEditTime: 2020-02-22 14:22:48
  */
 
 const whitelist = [
@@ -30,6 +30,7 @@ const whitelist = [
   /^\/api\/cmt\/addreplycmt/,
   /^\/api\/cmt\/addsubreply/,
   /^\/api\/art\/updlikeart/,
-  /^\/api\/cmt\/updlikecmt/
+  /^\/api\/cmt\/updlikecmt/,
+  /^\/api\/art\/fetchkeyword/
 ];
 module.exports = whitelist;
