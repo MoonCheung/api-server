@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-22 16:40:26
+ * @LastEditTime: 2020-03-06 22:14:10
  */
 
 const article = require("../models/article");
@@ -16,14 +16,15 @@ const { baiduSeoPush, baiduSeoUpdate, baiduSeoDel } = require('../utils/baiduseo
  */
 async function insertArticle(ctx) {
   try {
-    const { title, desc, banner, tag, content, catg } = ctx.request.body;
+    const { title, desc, banner, tag, content, catg, origin } = ctx.request.body;
     await article.create({
       title,
       desc,
       banner,
       tag,
       content,
-      catg
+      catg,
+      origin
     }).then(res => {
       baiduSeoPush(res.id)
       ctx.body = {
