@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 22:16:32
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-05 20:07:48
+ * @LastEditTime: 2020-03-15 00:46:16
  */
 
 const commentModel = require('../models/comment');
@@ -27,6 +27,52 @@ function getAvatars(param) {
     d: CONFIG.AVATAR.d
   }, true);
 }
+
+/**
+ * 获取所有评论总数API
+ * @return 返回所有评论总数
+ */
+async function getCommentTotal(ctx) {
+  try {
+    const Data = await articleModel.find({}, {
+      tag: 0,
+      catg: 0,
+      pv: 0,
+      like: 0,
+      title: 0,
+      desc: 0,
+      banner: 0,
+      content: 0,
+      origin: 0,
+      cdate: 0,
+      __v: 0
+    }).where({
+      status: 1
+    });
+    let count = 0;
+    let subCount = 0;
+    Data.forEach(elem => {
+      count += elem.cmt_count;
+      elem.comments.forEach(subElem => {
+        subCount += subElem.reply_count;
+      })
+    })
+    ctx.body = {
+      code: 1,
+      error: 0,
+      msg: "获取所有评论成功",
+      result: subCount + count
+    }
+  } catch (err) {
+    ctx.body = {
+      error: 1,
+      msg: "获取所有评论失败",
+      err
+    }
+  }
+}
+
+/*******************************Nuxt博客相关API*******************************/
 
 /**
  * 添加评论列表 API
@@ -376,6 +422,7 @@ async function updLikeComment(ctx) {
 }
 
 module.exports = {
+  getCommentTotal,
   fetchAddComment,
   addReplyComment,
   addSubReplyComment,

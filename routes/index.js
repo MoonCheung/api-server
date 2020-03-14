@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:51:06
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-22 13:41:12
+ * @LastEditTime: 2020-03-14 22:58:41
  */
 
 const Router = require("koa-router");
@@ -70,6 +70,8 @@ router.get("/category/getallcatg", category.getAllCatg);
 router.get("/getQNToken", qiniu.QNController.getQiniu);
 // 获取页面浏览数接口
 router.get("/art/getpvtot", article.getPvTotal);
+// 获取评论数接口
+router.get("/cmt/getallcmt", comment.getCommentTotal);
 
 /***** 小程序相关API *****/
 // 获取文章列表API
