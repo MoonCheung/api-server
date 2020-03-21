@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-06 22:14:10
+ * @LastEditTime: 2020-03-21 23:15:37
  */
 
 const article = require("../models/article");
@@ -97,7 +97,7 @@ async function articleList(ctx) {
  */
 async function editArticle(ctx) {
   try {
-    const { id, title, desc, banner, tag, content, catg } = ctx.request.body;
+    const { id, title, desc, banner, tag, content, catg, origin } = ctx.request.body;
     await article.findOneAndUpdate({
       id: id
     }, {
@@ -107,7 +107,8 @@ async function editArticle(ctx) {
         banner,
         tag,
         content,
-        catg
+        catg,
+        origin
       }
     }, {}, function(err, res) {
       baiduSeoUpdate(res.id);
@@ -532,9 +533,9 @@ async function chgLikeArtApplet(ctx) {
  */
 async function fetchAllArt(ctx) {
   try {
-    let data = ctx.request.body;
-    let page = parseInt(data.page * 5);
-    let result = await article.aggregate([{
+    const data = ctx.request.body;
+    const page = parseInt(data.page * 5);
+    const result = await article.aggregate([{
         $match: {
           status: 1
         }
@@ -548,7 +549,7 @@ async function fetchAllArt(ctx) {
           catg: "$catg",
           pv: "$pv",
           like: "$like",
-          comments: '$comments',
+          origin: "$origin",
           cmt_count: '$cmt_count',
           cdate: {
             $dateToString: {
