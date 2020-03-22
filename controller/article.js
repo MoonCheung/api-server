@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-22 17:13:33
+ * @LastEditTime: 2020-03-22 17:48:54
  */
 
 const article = require("../models/article");
@@ -856,6 +856,15 @@ async function fetchArtKeyWord(ctx) {
     }).where({
       status: 1
     }).then(result => {
+      const mapOrigin = new Map([
+        [0, '原创'],
+        [1, '转载'],
+        [2, '混合']
+      ])
+      result.forEach(elem => {
+        const getOrigin = mapOrigin.get(elem.origin);
+        Object.assign(elem._doc, { origin: getOrigin });
+      })
       ctx.body = {
         code: 1,
         error: 0,
