@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-21 23:15:37
+ * @LastEditTime: 2020-03-22 17:13:33
  */
 
 const article = require("../models/article");
@@ -549,7 +549,15 @@ async function fetchAllArt(ctx) {
           catg: "$catg",
           pv: "$pv",
           like: "$like",
-          origin: "$origin",
+          origin: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$origin", 0] }, then: "原创" },
+                { case: { $eq: ["$origin", 1] }, then: "转载" },
+                { case: { $eq: ["$origin", 2] }, then: "混合" },
+              ]
+            }
+          },
           cmt_count: '$cmt_count',
           cdate: {
             $dateToString: {
@@ -612,7 +620,7 @@ async function fetchAllArt(ctx) {
 async function fetchArtDeil(ctx) {
   try {
     const { id } = ctx.request.body;
-    let result = await article.findOneAndUpdate({
+    await article.findOneAndUpdate({
       id
     }, {
       //$inc运算符按指定值递增
@@ -626,13 +634,22 @@ async function fetchArtDeil(ctx) {
       },
       new: true,
       upsert: true
-    });
-    ctx.body = {
-      code: 1,
-      error: 0,
-      result,
-      msg: "获取文章详情成功"
-    }
+    }, function(error, res) {
+      const data = { ...res }
+      const mapOrigin = new Map([
+        [0, '原创'],
+        [1, '转载'],
+        [2, '混合']
+      ])
+      const getOrigin = mapOrigin.get(res.origin);
+      const result = Object.assign(data._doc, { origin: getOrigin });
+      ctx.body = {
+        code: 1,
+        error: 0,
+        result,
+        msg: "获取文章详情成功"
+      }
+    })
   } catch (err) {
     ctx.body = {
       error: 1,
@@ -694,7 +711,7 @@ async function fetchHotArt(ctx) {
  */
 async function fetchArtArch(ctx) {
   try {
-    let result = await article.aggregate([{
+    const result = await article.aggregate([{
         $match: {
           status: 1,
         }
@@ -713,6 +730,15 @@ async function fetchArtArch(ctx) {
             $push: {
               id: "$id",
               title: "$title",
+              origin: {
+                $switch: {
+                  branches: [
+                    { case: { $eq: ["$origin", 0] }, then: "原创" },
+                    { case: { $eq: ["$origin", 1] }, then: "转载" },
+                    { case: { $eq: ["$origin", 2] }, then: "混合" },
+                  ]
+                }
+              },
               date: {
                 $dateToString: {
                   format: "%m月%d日",
@@ -737,7 +763,7 @@ async function fetchArtArch(ctx) {
         }
       }
     ])
-    let count = await article.find().where({ status: 1 }).countDocuments();
+    const count = await article.find().where({ status: 1 }).countDocuments();
     ctx.body = {
       code: 1,
       error: 0,

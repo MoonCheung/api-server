@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:32:33
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-04 14:04:40
+ * @LastEditTime: 2020-03-22 16:55:50
  */
 
 const categoryModel = require("../models/category");
@@ -266,8 +266,8 @@ async function fetchAllCatg(ctx) {
  */
 async function fetchApptCatg(ctx) {
   try {
-    let data = ctx.request.body;
-    let page = parseInt(data.page * 5);
+    const data = ctx.request.body;
+    const page = parseInt(data.page * 5);
     await article.find({
       catg: data.catg
     }, {
@@ -279,6 +279,7 @@ async function fetchApptCatg(ctx) {
       catg: 1,
       pv: 1,
       like: 1,
+      origin: 1,
       comments: 1,
       cmt_count: 1,
       cdate: 1,
@@ -291,6 +292,15 @@ async function fetchApptCatg(ctx) {
     }).where({
       status: 1
     }).then(result => {
+      const mapOrigin = new Map([
+        [0, '原创'],
+        [1, '转载'],
+        [2, '混合']
+      ])
+      result.forEach(elem => {
+        const getOrigin = mapOrigin.get(elem.origin);
+        Object.assign(elem._doc, { origin: getOrigin });
+      })
       ctx.body = {
         code: 1,
         error: 0,

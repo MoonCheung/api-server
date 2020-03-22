@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:33:34
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-17 23:38:06
+ * @LastEditTime: 2020-03-22 16:59:16
  */
 
 const tagModel = require("../models/tag");
@@ -270,6 +270,7 @@ async function fetchApptTag(ctx) {
       catg: 1,
       pv: 1,
       like: 1,
+      origin: 1,
       comments: 1,
       cmt_count: 1,
       cdate: 1,
@@ -282,6 +283,15 @@ async function fetchApptTag(ctx) {
     }).where({
       status: 1
     }).then(result => {
+      const mapOrigin = new Map([
+        [0, '原创'],
+        [1, '转载'],
+        [2, '混合']
+      ])
+      result.forEach(elem => {
+        const getOrigin = mapOrigin.get(elem.origin);
+        Object.assign(elem._doc, { origin: getOrigin });
+      })
       ctx.body = {
         code: 1,
         error: 0,
