@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-22 17:48:54
+ * @LastEditTime: 2020-03-23 10:16:36
  */
 
 const article = require("../models/article");
@@ -634,7 +634,7 @@ async function fetchArtDeil(ctx) {
       },
       new: true,
       upsert: true
-    }, function(error, res) {
+    }).then(res => {
       const data = { ...res }
       const mapOrigin = new Map([
         [0, '原创'],
@@ -649,7 +649,7 @@ async function fetchArtDeil(ctx) {
         result,
         msg: "获取文章详情成功"
       }
-    })
+    });
   } catch (err) {
     ctx.body = {
       error: 1,
