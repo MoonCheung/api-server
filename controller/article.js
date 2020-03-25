@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-23 10:16:36
+ * @LastEditTime: 2020-03-25 23:25:37
  */
 
 const article = require("../models/article");
@@ -629,7 +629,6 @@ async function fetchArtDeil(ctx) {
       projection: {
         __v: 0,
         _id: 0,
-        desc: 0,
         status: 0
       },
       new: true,
