@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-12-12 22:16:32
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-15 00:46:16
+ * @LastEditTime: 2020-04-07 21:14:52
  */
 
 const commentModel = require('../models/comment');
@@ -169,7 +169,7 @@ async function addReplyComment(ctx) {
       ip_location = geoip.lookup(ip);
     }
 
-    let cmtData = await commentModel.findOne({
+    const cmtData = await commentModel.findOne({
       id: replyId
     }, {
       _id: 0,
@@ -193,7 +193,7 @@ async function addReplyComment(ctx) {
       sendMails(param);
     }
 
-    let commentId = cmtData.id.toString();
+    const commentId = cmtData.id.toString();
     if (Object.is(commentId, replyId)) {
       await replyModel.create({
         comment_id: replyId,
@@ -221,7 +221,7 @@ async function addReplyComment(ctx) {
         }).then(res => {
           // console.info('添加到回复数组成功', res);
         })
-        let result = {
+        const result = {
           parentId: replyData.comment_id,
           id: replyData.id,
           from_user: replyData.from_user,
@@ -270,7 +270,7 @@ async function addSubReplyComment(ctx) {
       ip_location = geoip.lookup(ip);
     }
 
-    let findData = await replyModel.findOne({
+    const findData = await replyModel.findOne({
       id: subReplyId
     }, {
       _id: 0,
@@ -322,7 +322,7 @@ async function addSubReplyComment(ctx) {
           }
           // console.info('添加到回复数组成功', res);
         })
-        let result = {
+        const result = {
           parentId: replyData.comment_id,
           id: replyData.id,
           from_user: replyData.from_user,

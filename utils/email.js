@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2020-02-02 14:42:56
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-05 19:57:31
+ * @LastEditTime: 2020-04-07 21:13:39
  */
 
 const nodemailer = require('nodemailer');
@@ -15,13 +15,14 @@ const ejs = require('ejs');
 const fs = require('fs');
 const success = chalk.bold.green;
 const error = chalk.bold.red;
+// 使用默认的SMTP传输创建可重用的transporter对象
 const transporter = nodemailer.createTransport({
   host: CONFIG.EMAIL.host,
   port: CONFIG.EMAIL.port,
-  secureConnection: true, // 使用了 SSL
+  secure: true, // 使用了 SSL
   auth: {
-    user: CONFIG.EMAIL.user,
-    pass: CONFIG.EMAIL.pass
+    user: CONFIG.EMAIL.user, // 邮箱用户
+    pass: CONFIG.EMAIL.pass  // 授权码，而不是登录密码
   }
 });
 
@@ -34,16 +35,16 @@ const sendMails = param => {
   });
 
   const mailOptions = {
-    from: `"MoonCheung" <${param.email}>`, // sender address
-    to: `"${param.to_name}" <${param.to_email}>`, // list of receivers
-    subject: '你好,你在MoonCheung的博客有新的评论回复,点击查看吧', // Subject line
+    from: `"MoonCheung" <${param.email}>`, // 发件人地址，from和auth.user必须一致，否则回报错，
+    to: `${param.to_name} <${param.to_email}>`, // 接收人清单
+    subject: '你好,你在MoonCheung的博客有新的评论回复,点击查看吧', // 主题行
     html
   };
 
   // 发送邮件
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
-      console.error(error('Message sent err:'), err.Error);
+      console.error(error('Message sent err:'), err);
     } else {
       console.info(success('Message sent success:'), info.response);
     }
