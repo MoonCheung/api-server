@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-31 14:59:48
+ * @LastEditTime: 2020-05-05 14:12:56
  */
 
 const article = require("../models/article");
@@ -541,6 +541,11 @@ async function fetchAllArt(ctx) {
         }
       },
       {
+        $sort: {
+          id: -1 //降序排列
+        }
+      },
+      {
         $project: {
           id: "$id",
           title: "$title",
@@ -591,11 +596,6 @@ async function fetchAllArt(ctx) {
       { $skip: page },
       {
         $limit: 5
-      },
-      {
-        $sort: {
-          id: -1 //降序排列
-        }
       }
     ])
     ctx.body = {
