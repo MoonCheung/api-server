@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-04-07 16:30:21
+ * @LastEditTime: 2020-05-09 22:46:56
  */
 
 const bash = require('../bash.js');
@@ -67,7 +67,8 @@ module.exports = {
       version: "1.3.0",
       author: {
         name: "MoonCheung",
-        email: "salvador23@163.com"
+        email: "salvador23@163.com",
+        website: "https://ikmoons.com"
       },
       github: "https://github.com/MoonCheung",
       powered: ["Vue", "Nuxt.js", "mpvue", "Node.js", "Koa", "MongoDB", "Mongoose", "Nginx"]

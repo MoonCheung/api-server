@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2020-02-06 00:08:37
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-06 01:06:23
+ * @LastEditTime: 2020-05-09 22:47:01
  */
 const request = require('request');
 const CONFIG = require('../config');
@@ -16,7 +16,7 @@ const error = chalk.bold.red;
 // POST request
 const postRequest = ({ type, urls, msg }) => {
   return request.post({
-    body: `${CONFIG.BAIDU.site}/article/${urls}`,
+    body: `${CONFIG.INFO.result.author.website}/article/${urls}`,
     headers: { 'Content-Type': 'text/plain' },
     url: `http://data.zz.baidu.com/${type}?site=${CONFIG.BAIDU.site}&token=${CONFIG.BAIDU.token}`,
   }, function(error, response, body) {

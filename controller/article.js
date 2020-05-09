@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-05-05 14:12:56
+ * @LastEditTime: 2020-05-09 23:19:34
  */
 
 const article = require("../models/article");
@@ -48,33 +48,31 @@ async function insertArticle(ctx) {
  */
 async function articleList(ctx) {
   try {
-    let data = ctx.request.body;
-    let page = parseInt((data.curPage - 1) * data.limit);
-    let pageSize = parseInt(data.limit);
-    let artData = await article
-      .aggregate([{
-        $project: {
-          id: "$id",
-          title: "$title",
-          desc: "$desc",
-          banner: "$banner",
-          tag: "$tag",
-          content: "$content",
-          catg: "$catg",
-          cdate: {
-            $dateToString: {
-              format: "%Y-%m-%d %H:%M:%S",
-              date: "$cdate"
-            }
-          },
-          status: "$status"
-        }
-      }])
-      .skip(page)
-      .limit(pageSize)
-      .sort({
+    const data = ctx.request.body;
+    const page = parseInt((data.curPage - 1) * data.limit);
+    const pageSize = parseInt(data.limit);
+    const artData = await article.aggregate([{
+      $sort: {
         id: -1 //降序排列
-      });
+      }
+    }, {
+      $project: {
+        id: "$id",
+        title: "$title",
+        desc: "$desc",
+        banner: "$banner",
+        tag: "$tag",
+        content: "$content",
+        catg: "$catg",
+        cdate: {
+          $dateToString: {
+            format: "%Y-%m-%d %H:%M:%S",
+            date: "$cdate"
+          }
+        },
+        status: "$status"
+      }
+    }]).skip(page).limit(pageSize);
     let total = await article.count({});
     ctx.body = {
       code: 1,
