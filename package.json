@@ -45,6 +45,7 @@
     "nodemailer": "^6.4.6",
     "qiniu": "^7.2.1",
     "request": "^2.88.0",
+    "sitemap": "^6.2.0",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
