@@ -3,8 +3,8 @@
  * @Author: MoonCheung
  * @Github: https://github.com/MoonCheung
  * @Date: 2020-02-03 11:21:46
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-03 11:50:13
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-07-09 22:19:15
  */
 
 const CONFIG = require('./index');
@@ -18,18 +18,20 @@ const envMap = {
     keepAlive: true,
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useUnifiedTopology: true
   },
   production: {
     // 此选项表示设置为 authenticationDatabase to admin
-    auth: { "authSource": CONFIG.mongodb.auth },
+    auth: { authSource: CONFIG.mongodb.auth },
     user: CONFIG.mongodb.user,
     pass: CONFIG.mongodb.pass,
     keepAlive: true,
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useUnifiedTopology: true
   }
-}
+};
 
 module.exports = envMap[environment];
