@@ -53,6 +53,7 @@ The node server provides RESTful api for application services based on koa
   - `geoip.js`: ip 地址查询
   - `markdown.js`: 解析 markdown
   - `baiduseo.js`: 百度 SEO 推送
+  - `sitemap.js`: 网站地图
 
 ## 执行命令
 
@@ -61,14 +62,14 @@ The node server provides RESTful api for application services based on koa
 cd node-server
 
 # 来进行安装node_modules
-npm install
+yarn install
 
 # 开发环境,运行node-server
-npm run dev
+yarn dev
 
 # 通过prettier 格式化代码
-npm run format
+yarn format
 
 # 生产环境,从服务器部署
-npm run start
+yarn start
 ```
