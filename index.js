@@ -9,7 +9,10 @@ const compress = require('koa-compress');
 const userAgent = require('koa2-useragent');
 const jwt = require('koa-jwt');
 
+const feed = require('./utils/rss');
 const siteMap = require('./utils/sitemap');
+// 生成RSS
+feed.getRSSData();
 // 生成网站地图
 siteMap.getSiteMapData();
 
