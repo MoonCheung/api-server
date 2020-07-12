@@ -1,10 +1,8 @@
 /*
  * @Description: 环境配置
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2020-02-03 11:21:46
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-07-09 22:19:15
+ * @Github: https://github.com/MoonCheung
  */
 
 const CONFIG = require('./index');

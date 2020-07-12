@@ -1,15 +1,13 @@
 /*
  * @Description: 邮件模块
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2020-02-02 14:42:56
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-04-07 21:13:39
+ * @Github: https://github.com/MoonCheung
  */
 
 const nodemailer = require('nodemailer');
 const CONFIG = require('../config');
-const chalk = require("chalk");
+const chalk = require('chalk');
 const path = require('path');
 const ejs = require('ejs');
 const fs = require('fs');
@@ -22,16 +20,18 @@ const transporter = nodemailer.createTransport({
   secure: true, // 使用了 SSL
   auth: {
     user: CONFIG.EMAIL.user, // 邮箱用户
-    pass: CONFIG.EMAIL.pass  // 授权码，而不是登录密码
+    pass: CONFIG.EMAIL.pass // 授权码，而不是登录密码
   }
 });
 
 const sendMails = param => {
   // 生成模板
-  const template = ejs.compile(fs.readFileSync(path.resolve(__dirname, '../views/comment.ejs'), 'utf8'));
+  const template = ejs.compile(
+    fs.readFileSync(path.resolve(__dirname, '../views/comment.ejs'), 'utf8')
+  );
   const html = template({
     param,
-    date: new Date().toLocaleString().replace(/\//g, "-")
+    date: new Date().toLocaleString().replace(/\//g, '-')
   });
 
   const mailOptions = {
@@ -49,6 +49,6 @@ const sendMails = param => {
       console.info(success('Message sent success:'), info.response);
     }
   });
-}
+};
 
 module.exports = sendMails;

@@ -1,13 +1,11 @@
 /*
  * @Description: 文章接口
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-15 10:21:15
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-05-09 23:19:34
+ * @Github: https://github.com/MoonCheung
  */
 
-const article = require("../models/article");
+const article = require('../models/article');
 const { baiduSeoPush, baiduSeoUpdate, baiduSeoDel } = require('../utils/baiduseo');
 
 /**
@@ -17,26 +15,28 @@ const { baiduSeoPush, baiduSeoUpdate, baiduSeoDel } = require('../utils/baiduseo
 async function insertArticle(ctx) {
   try {
     const { title, desc, banner, tag, content, catg, origin } = ctx.request.body;
-    await article.create({
-      title,
-      desc,
-      banner,
-      tag,
-      content,
-      catg,
-      origin
-    }).then(res => {
-      baiduSeoPush(res.id)
-      ctx.body = {
-        code: 1,
-        error: 0,
-        msg: "添加文章成功"
-      };
-    });
+    await article
+      .create({
+        title,
+        desc,
+        banner,
+        tag,
+        content,
+        catg,
+        origin
+      })
+      .then(res => {
+        baiduSeoPush(res.id);
+        ctx.body = {
+          code: 1,
+          error: 0,
+          msg: '添加文章成功'
+        };
+      });
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "添加文章失败",
+      msg: '添加文章失败',
       err
     };
   }
@@ -51,28 +51,34 @@ async function articleList(ctx) {
     const data = ctx.request.body;
     const page = parseInt((data.curPage - 1) * data.limit);
     const pageSize = parseInt(data.limit);
-    const artData = await article.aggregate([{
-      $sort: {
-        id: -1 //降序排列
-      }
-    }, {
-      $project: {
-        id: "$id",
-        title: "$title",
-        desc: "$desc",
-        banner: "$banner",
-        tag: "$tag",
-        content: "$content",
-        catg: "$catg",
-        cdate: {
-          $dateToString: {
-            format: "%Y-%m-%d %H:%M:%S",
-            date: "$cdate"
+    const artData = await article
+      .aggregate([
+        {
+          $sort: {
+            id: -1 //降序排列
           }
         },
-        status: "$status"
-      }
-    }]).skip(page).limit(pageSize);
+        {
+          $project: {
+            id: '$id',
+            title: '$title',
+            desc: '$desc',
+            banner: '$banner',
+            tag: '$tag',
+            content: '$content',
+            catg: '$catg',
+            cdate: {
+              $dateToString: {
+                format: '%Y-%m-%d %H:%M:%S',
+                date: '$cdate'
+              }
+            },
+            status: '$status'
+          }
+        }
+      ])
+      .skip(page)
+      .limit(pageSize);
     let total = await article.count({});
     ctx.body = {
       code: 1,
@@ -83,7 +89,7 @@ async function articleList(ctx) {
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取文章列表失败",
+      msg: '获取文章列表失败',
       err
     };
   }
@@ -96,30 +102,35 @@ async function articleList(ctx) {
 async function editArticle(ctx) {
   try {
     const { id, title, desc, banner, tag, content, catg, origin } = ctx.request.body;
-    await article.findOneAndUpdate({
-      id: id
-    }, {
-      $set: {
-        title,
-        desc,
-        banner,
-        tag,
-        content,
-        catg,
-        origin
+    await article.findOneAndUpdate(
+      {
+        id: id
+      },
+      {
+        $set: {
+          title,
+          desc,
+          banner,
+          tag,
+          content,
+          catg,
+          origin
+        }
+      },
+      {},
+      function(err, res) {
+        baiduSeoUpdate(res.id);
+        ctx.body = {
+          code: 1,
+          error: 0,
+          msg: '编辑文章成功'
+        };
       }
-    }, {}, function(err, res) {
-      baiduSeoUpdate(res.id);
-      ctx.body = {
-        code: 1,
-        error: 0,
-        msg: "编辑文章成功"
-      };
-    })
+    );
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "编辑文章失败",
+      msg: '编辑文章失败',
       err
     };
   }
@@ -132,22 +143,25 @@ async function editArticle(ctx) {
 async function getArtDetl(ctx) {
   try {
     const { id } = ctx.request.body;
-    let ArtDetlData = await article.findOne({
-      id: id
-    }, {
-      __v: 0,
-      status: 0
-    });
+    let ArtDetlData = await article.findOne(
+      {
+        id: id
+      },
+      {
+        __v: 0,
+        status: 0
+      }
+    );
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取文章详情成功",
+      msg: '获取文章详情成功',
       ArtDetlData
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取文章详情失败",
+      msg: '获取文章详情失败',
       err
     };
   }
@@ -162,17 +176,17 @@ async function delArticle(ctx) {
     const { id } = ctx.request.body;
     await article.findOne({ id }, { id: 1 }, function(err, res) {
       baiduSeoDel(res.id);
-    })
-    await article.deleteOne({ id: id })
+    });
+    await article.deleteOne({ id: id });
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "删除文章成功"
+      msg: '删除文章成功'
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "删除文章失败",
+      msg: '删除文章失败',
       err
     };
   }
@@ -185,23 +199,28 @@ async function delArticle(ctx) {
 async function chgArtStatus(ctx) {
   try {
     const { id, status } = ctx.request.body;
-    await article.updateOne({
-      id: id
-    }, {
-      $set: {
-        status
-      }
-    }).then(() => {
-      ctx.body = {
-        code: 1,
-        error: 0,
-        msg: "改变文章状态成功"
-      };
-    });
+    await article
+      .updateOne(
+        {
+          id: id
+        },
+        {
+          $set: {
+            status
+          }
+        }
+      )
+      .then(() => {
+        ctx.body = {
+          code: 1,
+          error: 0,
+          msg: '改变文章状态成功'
+        };
+      });
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "改变文章状态失败",
+      msg: '改变文章状态失败',
       err
     };
   }
@@ -213,20 +232,21 @@ async function chgArtStatus(ctx) {
  */
 async function artAllList(ctx) {
   try {
-    let artListData = await article.aggregate([{
+    let artListData = await article.aggregate([
+      {
         $match: {
           status: 1
         }
       },
       {
         $project: {
-          id: "$_id",
-          uid: "$id",
-          title: "$title",
+          id: '$_id',
+          uid: '$id',
+          title: '$title',
           cdate: {
             $dateToString: {
-              format: "%Y-%m-%d %H:%M:%S",
-              date: "$cdate"
+              format: '%Y-%m-%d %H:%M:%S',
+              date: '$cdate'
             }
           },
           _id: 0
@@ -239,19 +259,19 @@ async function artAllList(ctx) {
       }
     ]);
     let artTotalData = await article.countDocuments({
-      status: "1"
+      status: '1'
     });
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取文章列表成功",
+      msg: '获取文章列表成功',
       artListData,
       artTotalData
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取文章列表失败",
+      msg: '获取文章列表失败',
       err
     };
   }
@@ -263,7 +283,8 @@ async function artAllList(ctx) {
  */
 async function getPvTotal(ctx) {
   try {
-    let result = await article.aggregate([{
+    let result = await article.aggregate([
+      {
         $match: {
           status: 1
         }
@@ -272,7 +293,7 @@ async function getPvTotal(ctx) {
         $group: {
           _id: null,
           pv_count: {
-            $sum: "$pv"
+            $sum: '$pv'
           }
         }
       }
@@ -280,13 +301,13 @@ async function getPvTotal(ctx) {
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取页面浏览量成功",
+      msg: '获取页面浏览量成功',
       result
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取页面浏览量失败",
+      msg: '获取页面浏览量失败',
       err
     };
   }
@@ -302,22 +323,23 @@ async function getallAtrApplet(ctx) {
   try {
     let data = ctx.request.body;
     let page = parseInt(data.allPage * 5);
-    let artList = await article.aggregate([{
+    let artList = await article.aggregate([
+      {
         $match: {
           status: 1
         }
       },
       {
         $project: {
-          id: "$id",
-          title: "$title",
-          desc: "$desc",
-          catg: "$catg",
-          pv: "$pv",
+          id: '$id',
+          title: '$title',
+          desc: '$desc',
+          catg: '$catg',
+          pv: '$pv',
           cdate: {
             $dateToString: {
-              format: "%Y年%m月%d日",
-              date: "$cdate"
+              format: '%Y年%m月%d日',
+              date: '$cdate'
             }
           },
           _id: 0
@@ -325,9 +347,9 @@ async function getallAtrApplet(ctx) {
       },
       {
         $lookup: {
-          from: "users",
+          from: 'users',
           pipeline: [
-            { $match: { name: "MoonCheung" } },
+            { $match: { name: 'MoonCheung' } },
             {
               $project: {
                 _id: 0,
@@ -338,11 +360,11 @@ async function getallAtrApplet(ctx) {
               }
             }
           ],
-          as: "myAuthor"
+          as: 'myAuthor'
         }
       },
       //$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
-      { $unwind: "$myAuthor" },
+      { $unwind: '$myAuthor' },
       { $skip: page },
       {
         $limit: 5
@@ -356,13 +378,13 @@ async function getallAtrApplet(ctx) {
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取所有文章列表成功",
+      msg: '获取所有文章列表成功',
       artList
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取所有文章列表失败",
+      msg: '获取所有文章列表失败',
       err
     };
   }
@@ -375,32 +397,36 @@ async function getallAtrApplet(ctx) {
 async function getArtDeilApplet(ctx) {
   try {
     let data = ctx.request.query;
-    let ArtDeilData = await article.findOneAndUpdate({
-      id: data.id
-    }, {
-      //$inc运算符按指定值递增
-      $inc: { pv: 1 }
-    }, {
-      projection: {
-        __v: 0,
-        _id: 0,
-        desc: 0,
-        banner: 0,
-        status: 0
+    let ArtDeilData = await article.findOneAndUpdate(
+      {
+        id: data.id
       },
-      new: true,
-      upsert: true
-    });
+      {
+        //$inc运算符按指定值递增
+        $inc: { pv: 1 }
+      },
+      {
+        projection: {
+          __v: 0,
+          _id: 0,
+          desc: 0,
+          banner: 0,
+          status: 0
+        },
+        new: true,
+        upsert: true
+      }
+    );
     ctx.body = {
       code: 1,
       error: 0,
       ArtDeilData,
-      msg: "获取文章详情成功"
+      msg: '获取文章详情成功'
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取文章详情失败",
+      msg: '获取文章详情失败',
       err
     };
   }
@@ -414,7 +440,8 @@ async function getApptCatgApplet(ctx) {
   try {
     let data = ctx.request.body;
     let page = parseInt(data.curPage * 5);
-    let apptArtList = await article.aggregate([{
+    let apptArtList = await article.aggregate([
+      {
         $match: {
           status: 1,
           catg: data.catg
@@ -422,15 +449,15 @@ async function getApptCatgApplet(ctx) {
       },
       {
         $project: {
-          id: "$id",
-          title: "$title",
-          desc: "$desc",
-          catg: "$catg",
-          pv: "$pv",
+          id: '$id',
+          title: '$title',
+          desc: '$desc',
+          catg: '$catg',
+          pv: '$pv',
           cdate: {
             $dateToString: {
-              format: "%Y年%m月%d日",
-              date: "$cdate"
+              format: '%Y年%m月%d日',
+              date: '$cdate'
             }
           },
           _id: 0
@@ -438,9 +465,9 @@ async function getApptCatgApplet(ctx) {
       },
       {
         $lookup: {
-          from: "users",
+          from: 'users',
           pipeline: [
-            { $match: { name: "MoonCheung" } },
+            { $match: { name: 'MoonCheung' } },
             {
               $project: {
                 _id: 0,
@@ -451,11 +478,11 @@ async function getApptCatgApplet(ctx) {
               }
             }
           ],
-          as: "apptAuthor"
+          as: 'apptAuthor'
         }
       },
       //$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
-      { $unwind: "$apptAuthor" },
+      { $unwind: '$apptAuthor' },
       { $skip: page },
       {
         $limit: 5
@@ -469,13 +496,13 @@ async function getApptCatgApplet(ctx) {
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取指定分类文章成功",
+      msg: '获取指定分类文章成功',
       apptArtList
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取指定分类文章失败",
+      msg: '获取指定分类文章失败',
       err
     };
   }
@@ -488,37 +515,41 @@ async function getApptCatgApplet(ctx) {
 async function chgLikeArtApplet(ctx) {
   try {
     let data = ctx.request.body;
-    let result = await article.findOneAndUpdate({
-      id: data.id
-    }, {
-      $set: { like: data.like }
-    }, {
-      projection: {
-        __v: 0,
-        _id: 0,
-        pv: 0,
-        tag: 0,
-        title: 0,
-        catg: 0,
-        desc: 0,
-        content: 0,
-        banner: 0,
-        cdate: 0,
-        status: 0
+    let result = await article.findOneAndUpdate(
+      {
+        id: data.id
       },
-      new: true,
-      upsert: true
-    });
+      {
+        $set: { like: data.like }
+      },
+      {
+        projection: {
+          __v: 0,
+          _id: 0,
+          pv: 0,
+          tag: 0,
+          title: 0,
+          catg: 0,
+          desc: 0,
+          content: 0,
+          banner: 0,
+          cdate: 0,
+          status: 0
+        },
+        new: true,
+        upsert: true
+      }
+    );
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "改变指定文章点赞成功",
+      msg: '改变指定文章点赞成功',
       result
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "改变指定文章点赞失败",
+      msg: '改变指定文章点赞失败',
       err
     };
   }
@@ -533,7 +564,8 @@ async function fetchAllArt(ctx) {
   try {
     const data = ctx.request.body;
     const page = parseInt(data.page * 5);
-    const result = await article.aggregate([{
+    const result = await article.aggregate([
+      {
         $match: {
           status: 1
         }
@@ -545,27 +577,27 @@ async function fetchAllArt(ctx) {
       },
       {
         $project: {
-          id: "$id",
-          title: "$title",
-          desc: "$desc",
-          banner: "$banner",
-          catg: "$catg",
-          pv: "$pv",
-          like: "$like",
+          id: '$id',
+          title: '$title',
+          desc: '$desc',
+          banner: '$banner',
+          catg: '$catg',
+          pv: '$pv',
+          like: '$like',
           origin: {
             $switch: {
               branches: [
-                { case: { $eq: ["$origin", 0] }, then: "原创" },
-                { case: { $eq: ["$origin", 1] }, then: "转载" },
-                { case: { $eq: ["$origin", 2] }, then: "混合" },
+                { case: { $eq: ['$origin', 0] }, then: '原创' },
+                { case: { $eq: ['$origin', 1] }, then: '转载' },
+                { case: { $eq: ['$origin', 2] }, then: '混合' }
               ]
             }
           },
           cmt_count: '$cmt_count',
           cdate: {
             $dateToString: {
-              format: "%Y年%m月%d日",
-              date: "$cdate"
+              format: '%Y年%m月%d日',
+              date: '$cdate'
             }
           },
           _id: 0
@@ -573,41 +605,44 @@ async function fetchAllArt(ctx) {
       },
       {
         $lookup: {
-          from: "comments",
+          from: 'comments',
           let: { parentArtId: '$id' },
-          pipeline: [{
-            $match: {
-              $expr: {
-                $eq: ["$artId", "$$parentArtId"]
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ['$artId', '$$parentArtId']
+                }
+              }
+            },
+            {
+              $project: {
+                reply_count: 1,
+                id: 1,
+                _id: 0
               }
             }
-          }, {
-            $project: {
-              reply_count: 1,
-              id: 1,
-              _id: 0,
-            }
-          }],
-          as: "comments"
+          ],
+          as: 'comments'
         }
       },
       { $skip: page },
       {
         $limit: 5
       }
-    ])
+    ]);
     ctx.body = {
       code: 1,
       error: 0,
       result,
-      msg: "获取文章成功"
-    }
+      msg: '获取文章成功'
+    };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取文章失败",
+      msg: '获取文章失败',
       err
-    }
+    };
   }
 }
 
@@ -618,41 +653,47 @@ async function fetchAllArt(ctx) {
 async function fetchArtDeil(ctx) {
   try {
     const { id } = ctx.request.body;
-    await article.findOneAndUpdate({
-      id
-    }, {
-      //$inc运算符按指定值递增
-      $inc: { pv: 1 }
-    }, {
-      projection: {
-        __v: 0,
-        _id: 0,
-        status: 0
-      },
-      new: true,
-      upsert: true
-    }).then(res => {
-      const data = { ...res }
-      const mapOrigin = new Map([
-        [0, '原创'],
-        [1, '转载'],
-        [2, '混合']
-      ])
-      const getOrigin = mapOrigin.get(res.origin);
-      const result = Object.assign(data._doc, { origin: getOrigin });
-      ctx.body = {
-        code: 1,
-        error: 0,
-        result,
-        msg: "获取文章详情成功"
-      }
-    });
+    await article
+      .findOneAndUpdate(
+        {
+          id
+        },
+        {
+          //$inc运算符按指定值递增
+          $inc: { pv: 1 }
+        },
+        {
+          projection: {
+            __v: 0,
+            _id: 0,
+            status: 0
+          },
+          new: true,
+          upsert: true
+        }
+      )
+      .then(res => {
+        const data = { ...res };
+        const mapOrigin = new Map([
+          [0, '原创'],
+          [1, '转载'],
+          [2, '混合']
+        ]);
+        const getOrigin = mapOrigin.get(res.origin);
+        const result = Object.assign(data._doc, { origin: getOrigin });
+        ctx.body = {
+          code: 1,
+          error: 0,
+          result,
+          msg: '获取文章详情成功'
+        };
+      });
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取文章详情失败",
+      msg: '获取文章详情失败',
       err
-    }
+    };
   }
 }
 
@@ -662,7 +703,8 @@ async function fetchArtDeil(ctx) {
  */
 async function fetchHotArt(ctx) {
   try {
-    let result = await article.aggregate([{
+    let result = await article.aggregate([
+      {
         $match: {
           status: 1,
           pv: {
@@ -673,8 +715,8 @@ async function fetchHotArt(ctx) {
       },
       {
         $project: {
-          id: "$id",
-          title: "$title",
+          id: '$id',
+          title: '$title',
           _id: 0
         }
       },
@@ -686,19 +728,19 @@ async function fetchHotArt(ctx) {
           id: -1 //降序排列
         }
       }
-    ])
+    ]);
     ctx.body = {
       code: 1,
       error: 0,
       result,
-      msg: "获取热门文章成功"
-    }
+      msg: '获取热门文章成功'
+    };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取热门文章失败",
+      msg: '获取热门文章失败',
       err
-    }
+    };
   }
 }
 
@@ -708,38 +750,39 @@ async function fetchHotArt(ctx) {
  */
 async function fetchArtArch(ctx) {
   try {
-    const result = await article.aggregate([{
+    const result = await article.aggregate([
+      {
         $match: {
-          status: 1,
+          status: 1
         }
       },
       {
         $group: {
           _id: {
             year: {
-              $year: "$cdate"
+              $year: '$cdate'
             },
             month: {
-              $month: "$cdate"
-            },
+              $month: '$cdate'
+            }
           },
           firstDate: {
             $push: {
-              id: "$id",
-              title: "$title",
+              id: '$id',
+              title: '$title',
               origin: {
                 $switch: {
                   branches: [
-                    { case: { $eq: ["$origin", 0] }, then: "原创" },
-                    { case: { $eq: ["$origin", 1] }, then: "转载" },
-                    { case: { $eq: ["$origin", 2] }, then: "混合" },
+                    { case: { $eq: ['$origin', 0] }, then: '原创' },
+                    { case: { $eq: ['$origin', 1] }, then: '转载' },
+                    { case: { $eq: ['$origin', 2] }, then: '混合' }
                   ]
                 }
               },
               date: {
                 $dateToString: {
-                  format: "%m月%d日",
-                  date: "$cdate"
+                  format: '%m月%d日',
+                  date: '$cdate'
                 }
               }
             }
@@ -749,9 +792,9 @@ async function fetchArtArch(ctx) {
       {
         $group: {
           _id: {
-            year: "$_id.year",
+            year: '$_id.year'
           },
-          secondDate: { $push: { month: "$_id.month", items: "$firstDate" } }
+          secondDate: { $push: { month: '$_id.month', items: '$firstDate' } }
         }
       },
       {
@@ -759,21 +802,24 @@ async function fetchArtArch(ctx) {
           _id: -1 //降序排列
         }
       }
-    ])
-    const count = await article.find().where({ status: 1 }).countDocuments();
+    ]);
+    const count = await article
+      .find()
+      .where({ status: 1 })
+      .countDocuments();
     ctx.body = {
       code: 1,
       error: 0,
       result,
       count,
-      msg: "获取文章归档成功"
-    }
+      msg: '获取文章归档成功'
+    };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取文章归档失败",
+      msg: '获取文章归档失败',
       err
-    }
+    };
   }
 }
 
@@ -784,46 +830,53 @@ async function fetchArtArch(ctx) {
 async function updLikeAtrPage(ctx) {
   try {
     const { id } = ctx.params;
-    await article.where({
-      status: 1
-    }).findOneAndUpdate({
-      id
-    }, {
-      // $inc运算符按指定值递增
-      $inc: {
-        like: 1
-      }
-    }, {
-      projection: {
-        __v: 0,
-        _id: 0,
-        tag: 0,
-        pv: 0,
-        status: 0,
-        comments: 0,
-        cmt_count: 0,
-        title: 0,
-        desc: 0,
-        banner: 0,
-        content: 0,
-        catg: 0,
-        cdate: 0
-      },
-      new: true
-    }).then(result => {
-      ctx.body = {
-        code: 1,
-        error: 0,
-        result,
-        msg: "点赞文章详情成功"
-      }
-    });
+    await article
+      .where({
+        status: 1
+      })
+      .findOneAndUpdate(
+        {
+          id
+        },
+        {
+          // $inc运算符按指定值递增
+          $inc: {
+            like: 1
+          }
+        },
+        {
+          projection: {
+            __v: 0,
+            _id: 0,
+            tag: 0,
+            pv: 0,
+            status: 0,
+            comments: 0,
+            cmt_count: 0,
+            title: 0,
+            desc: 0,
+            banner: 0,
+            content: 0,
+            catg: 0,
+            cdate: 0
+          },
+          new: true
+        }
+      )
+      .then(result => {
+        ctx.body = {
+          code: 1,
+          error: 0,
+          result,
+          msg: '点赞文章详情成功'
+        };
+      });
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "点赞文章详情失败",
+      msg: '点赞文章详情失败',
       err
-    }
+    };
   }
 }
 
@@ -835,46 +888,53 @@ async function fetchArtKeyWord(ctx) {
   try {
     const data = ctx.request.body;
     const page = parseInt(data.page * 5);
-    await article.find({
-      // $regex 为正则匹配实现模糊查询，$options为不区分大小写
-      title: { $regex: data.keyword, $options: 'i' }
-    }, {
-      __v: 0,
-      _id: 0,
-      tag: 0,
-      status: 0,
-      content: 0
-    }, {
-      skip: page,
-      limit: 5,
-      sort: {
-        id: -1 //降序排列
-      }
-    }).where({
-      status: 1
-    }).then(result => {
-      const mapOrigin = new Map([
-        [0, '原创'],
-        [1, '转载'],
-        [2, '混合']
-      ])
-      result.forEach(elem => {
-        const getOrigin = mapOrigin.get(elem.origin);
-        Object.assign(elem._doc, { origin: getOrigin });
+    await article
+      .find(
+        {
+          // $regex 为正则匹配实现模糊查询，$options为不区分大小写
+          title: { $regex: data.keyword, $options: 'i' }
+        },
+        {
+          __v: 0,
+          _id: 0,
+          tag: 0,
+          status: 0,
+          content: 0
+        },
+        {
+          skip: page,
+          limit: 5,
+          sort: {
+            id: -1 //降序排列
+          }
+        }
+      )
+      .where({
+        status: 1
       })
-      ctx.body = {
-        code: 1,
-        error: 0,
-        result,
-        msg: "搜索关键字成功"
-      }
-    })
+      .then(result => {
+        const mapOrigin = new Map([
+          [0, '原创'],
+          [1, '转载'],
+          [2, '混合']
+        ]);
+        result.forEach(elem => {
+          const getOrigin = mapOrigin.get(elem.origin);
+          Object.assign(elem._doc, { origin: getOrigin });
+        });
+        ctx.body = {
+          code: 1,
+          error: 0,
+          result,
+          msg: '搜索关键字成功'
+        };
+      });
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "搜索关键字失败",
+      msg: '搜索关键字失败',
       err
-    }
+    };
   }
 }
 

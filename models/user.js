@@ -1,15 +1,13 @@
 /*
  * @Description: 用户模型
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 17:35:08
- * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-13 11:34:20
+ * @Github: https://github.com/MoonCheung
  */
 
-const autoIncrement = require("mongoose-auto-increment");
-const mongoose = require("mongoose");
-const DB = require("./db");
+const autoIncrement = require('mongoose-auto-increment');
+const mongoose = require('mongoose');
+const DB = require('./db');
 const Schema = mongoose.Schema;
 
 let CountersSchema = new Schema({
@@ -19,7 +17,7 @@ let CountersSchema = new Schema({
 let UserSchema = new Schema({
   id: {
     type: Number,
-    ref: "id"
+    ref: 'id'
   },
   username: {
     type: String,
@@ -48,10 +46,10 @@ let UserSchema = new Schema({
 });
 
 UserSchema.plugin(autoIncrement.plugin, {
-  model: "user",
-  field: "id",
+  model: 'user',
+  field: 'id',
   startAt: 1,
   incrementBy: 1
 });
-CountersSchema.plugin(autoIncrement.plugin, "id");
-module.exports = DB.model("user", UserSchema);
+CountersSchema.plugin(autoIncrement.plugin, 'id');
+module.exports = DB.model('user', UserSchema);

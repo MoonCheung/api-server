@@ -1,10 +1,8 @@
 /*
  * @Description: 白名单API
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-25 23:17:40
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-22 14:22:48
+ * @Github: https://github.com/MoonCheung
  */
 
 const whitelist = [

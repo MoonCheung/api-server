@@ -1,10 +1,8 @@
 /*
  * @Description: 解析 markdown 模块
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2020-02-05 16:40:46
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-05 18:10:28
+ * @Github: https://github.com/MoonCheung
  */
 
 const markdown = require('markdown-it');
@@ -29,7 +27,7 @@ const config = {
   xhtmlOut: true,
   langPrefix: 'md-',
   quotes: '“”‘’'
-}
+};
 
 const parseMark = new markdown(config)
   .use(abbr)
@@ -42,6 +40,6 @@ const parseMark = new markdown(config)
   .use(sub)
   .use(sup)
   .use(taskLists)
-  .use(toc)
+  .use(toc);
 
-module.exports = parseMark
+module.exports = parseMark;

@@ -1,14 +1,12 @@
 /*
  * @Description: 文章标签模型
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 14:58:15
- * @LastEditors: MoonCheung
- * @LastEditTime: 2019-12-09 21:21:34
+ * @Github: https://github.com/MoonCheung
  */
-const autoIncrement = require("mongoose-auto-increment");
-const mongoose = require("mongoose");
-const DB = require("./db");
+const autoIncrement = require('mongoose-auto-increment');
+const mongoose = require('mongoose');
+const DB = require('./db');
 const Schema = mongoose.Schema;
 
 let CountersSchema = new Schema({
@@ -18,7 +16,7 @@ let CountersSchema = new Schema({
 let tabSchema = new Schema({
   id: {
     type: Number,
-    ref: "id"
+    ref: 'id'
   },
   tagname: String,
   tagdesc: String,
@@ -33,10 +31,10 @@ let tabSchema = new Schema({
 });
 
 tabSchema.plugin(autoIncrement.plugin, {
-  model: "tag",
-  field: "id",
+  model: 'tag',
+  field: 'id',
   startAt: 1,
   incrementBy: 1
 });
-CountersSchema.plugin(autoIncrement.plugin, "id");
-module.exports = DB.model("tag", tabSchema);
+CountersSchema.plugin(autoIncrement.plugin, 'id');
+module.exports = DB.model('tag', tabSchema);

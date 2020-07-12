@@ -1,14 +1,12 @@
 /*
  * @Description: 七牛云上传配置
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-15 23:18:04
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-03 11:27:40
+ * @Github: https://github.com/MoonCheung
  */
 
-const qiniu = require("qiniu");
-const CONFIG = require("../config");
+const qiniu = require('qiniu');
+const CONFIG = require('../config');
 
 // 创建上传之前需要两个凭证
 const accessKey = CONFIG.QINIU.AccessKey;
@@ -31,7 +29,7 @@ class QNController {
       let uploadToken = putPolicy.uploadToken(mac);
       ctx.body = {
         error: 0,
-        msg: "获取upload Token 成功",
+        msg: '获取upload Token 成功',
         result: {
           token: uploadToken
         }
@@ -40,7 +38,7 @@ class QNController {
       ctx.response.status = 500;
       ctx.body = {
         code: 500,
-        msg: "获取Token失败",
+        msg: '获取Token失败',
         err
       };
     }

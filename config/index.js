@@ -1,10 +1,8 @@
 /*
  * @Description: app 配置
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2019-04-12 16:50:52
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-05-09 22:46:56
+ * @Github: https://github.com/MoonCheung
  */
 
 const bash = require('../bash.js');
@@ -15,7 +13,7 @@ module.exports = {
   // process.env属性返回一个包含用户环境信息的对象 See environ(7).
   port: process.env.PORT || 3030,
   session: {
-    key: "blogs",
+    key: 'blogs',
     maxAge: 86400000,
     autoCommit: true,
     overwrite: true,
@@ -26,20 +24,20 @@ module.exports = {
   },
   // mongodb数据库集合文档
   mongodb: {
-    url: "mongodb://127.0.0.1:27017/Blogs",
+    url: 'mongodb://127.0.0.1:27017/Blogs',
     auth: argv.mongo_auth,
     user: argv.mongo_user,
     pass: argv.mongo_pass
   },
   // 七牛配置
   QINIU: {
-    Bucket: "blogs",
+    Bucket: 'blogs',
     AccessKey: argv.qn_AccessKey || 'your access key',
     SecretKey: argv.qn_SecretKey || 'your secret key'
   },
   // jwtToken
   jwtToken: {
-    PrivateKey: "blogs_token"
+    PrivateKey: 'blogs_token'
   },
   // 百度推送
   BAIDU: {
@@ -56,22 +54,22 @@ module.exports = {
     host: 'smtp.163.com',
     port: 465,
     user: argv.mail_user || 'your mail user',
-    pass: argv.mail_pass || 'your mail pass',
+    pass: argv.mail_pass || 'your mail pass'
   },
   // node服务器信息
   INFO: {
-    status: "success",
-    msg: "数据请求成功!",
+    status: 'success',
+    msg: '数据请求成功!',
     result: {
-      name: "node-server",
-      version: "1.3.0",
+      name: 'node-server',
+      version: '1.3.0',
       author: {
-        name: "MoonCheung",
-        email: "salvador23@163.com",
-        website: "https://ikmoons.com"
+        name: 'MoonCheung',
+        email: 'salvador23@163.com',
+        website: 'https://ikmoons.com'
       },
-      github: "https://github.com/MoonCheung",
-      powered: ["Vue", "Nuxt.js", "mpvue", "Node.js", "Koa", "MongoDB", "Mongoose", "Nginx"]
+      github: 'https://github.com/MoonCheung',
+      powered: ['Vue', 'Nuxt.js', 'mpvue', 'Node.js', 'Koa', 'MongoDB', 'Mongoose', 'Nginx']
     }
   },
   // gravatar 配置

@@ -1,16 +1,14 @@
 /*
  * @Description: 文章模型
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-01 16:20:33
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-02-21 15:00:49
+ * @Github: https://github.com/MoonCheung
  */
 
-const autoIncrement = require("mongoose-auto-increment");
+const autoIncrement = require('mongoose-auto-increment');
 const autopopulate = require('mongoose-autopopulate');
-const mongoose = require("mongoose");
-const DB = require("./db");
+const mongoose = require('mongoose');
+const DB = require('./db');
 const Schema = mongoose.Schema;
 
 let CountersSchema = new Schema({
@@ -20,7 +18,7 @@ let CountersSchema = new Schema({
 let ArticleSchema = new Schema({
   id: {
     type: Number,
-    ref: "id"
+    ref: 'id'
   },
   title: String,
   desc: String,
@@ -36,11 +34,13 @@ let ArticleSchema = new Schema({
     default: 0
   },
   // 评论数组
-  comments: [{
-    type: Schema.Types.ObjectId,
-    ref: 'comment',
-    autopopulate: { select: '-_id-__v', options: { sort: { id: -1 } } }
-  }],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'comment',
+      autopopulate: { select: '-_id-__v', options: { sort: { id: -1 } } }
+    }
+  ],
   // 评论数
   cmt_count: {
     type: Number,
@@ -69,10 +69,10 @@ let ArticleSchema = new Schema({
 
 ArticleSchema.plugin(autopopulate);
 ArticleSchema.plugin(autoIncrement.plugin, {
-  model: "article",
-  field: "id",
+  model: 'article',
+  field: 'id',
   startAt: 1,
   incrementBy: 1
 });
-CountersSchema.plugin(autoIncrement.plugin, "id");
-module.exports = DB.model("article", ArticleSchema);
+CountersSchema.plugin(autoIncrement.plugin, 'id');
+module.exports = DB.model('article', ArticleSchema);

@@ -1,10 +1,8 @@
 /*
  * @Description: 回复模型
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2020-01-02 16:45:08
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-01-07 23:44:40
+ * @Github: https://github.com/MoonCheung
  */
 
 const autoIncrement = require('mongoose-auto-increment');
@@ -13,7 +11,7 @@ const DB = require('./db');
 const Schema = mongoose.Schema;
 
 let CountersSchema = new Schema({
-  name: String,
+  name: String
 });
 
 let ReplySchema = new Schema({
@@ -25,7 +23,7 @@ let ReplySchema = new Schema({
   // 主键id
   id: {
     type: Number,
-    ref: 'id',
+    ref: 'id'
   },
   // 评论者用户
   from_user: String,
@@ -39,19 +37,19 @@ let ReplySchema = new Schema({
   from_content: String,
   // IP物理地址
   from_locate: {
-    type: Object,
+    type: Object
   },
   // 用户代理解析器
   from_ua: String,
   // 评论者时间
   from_date: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   },
   // 点赞数
   like: {
     type: Number,
-    default: 0,
+    default: 0
   },
   // 被评论者id
   to_id: {
@@ -67,14 +65,14 @@ let ReplySchema = new Schema({
   to_email: {
     type: String,
     default: ''
-  },
+  }
 });
 
 ReplySchema.plugin(autoIncrement.plugin, {
   model: 'reply',
   field: 'id',
   startAt: 1,
-  incrementBy: 1,
+  incrementBy: 1
 });
 CountersSchema.plugin(autoIncrement.plugin, 'id');
 module.exports = DB.model('reply', ReplySchema);

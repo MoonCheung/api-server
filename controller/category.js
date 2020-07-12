@@ -1,14 +1,12 @@
 /*
  * @Description: 文章分类
  * @Author: MoonCheung
- * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-12 15:32:33
- * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-22 16:55:50
+ * @Github: https://github.com/MoonCheung
  */
 
-const categoryModel = require("../models/category");
-const article = require("../models/article");
+const categoryModel = require('../models/category');
+const article = require('../models/article');
 
 /**
  * 添加分类 API
@@ -28,13 +26,13 @@ async function addCategory(ctx) {
         ctx.body = {
           code: 1,
           error: 0,
-          msg: "添加分类成功"
+          msg: '添加分类成功'
         };
       });
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "添加分类失败",
+      msg: '添加分类失败',
       err
     };
   }
@@ -50,20 +48,22 @@ async function getCategory(ctx) {
     let page = parseInt((data.curPage - 1) * data.limit);
     let pageSize = parseInt(data.limit);
     let catgData = await categoryModel
-      .aggregate([{
-        $project: {
-          id: "$_id", //将_id映射成id
-          categoryname: "$categoryname",
-          categorydesc: "$categorydesc",
-          cdate: {
-            $dateToString: {
-              format: "%Y-%m-%d %H:%M:%S",
-              date: "$cdate"
-            }
-          },
-          _id: 0
+      .aggregate([
+        {
+          $project: {
+            id: '$_id', //将_id映射成id
+            categoryname: '$categoryname',
+            categorydesc: '$categorydesc',
+            cdate: {
+              $dateToString: {
+                format: '%Y-%m-%d %H:%M:%S',
+                date: '$cdate'
+              }
+            },
+            _id: 0
+          }
         }
-      }])
+      ])
       .skip(page)
       .limit(pageSize)
       .sort({
@@ -78,7 +78,7 @@ async function getCategory(ctx) {
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取分类失败",
+      msg: '获取分类失败',
       err
     };
   }
@@ -92,25 +92,28 @@ async function editCategory(ctx) {
   try {
     let { id, categoryname, categorydesc } = ctx.request.body;
     await categoryModel
-      .updateOne({
-        _id: id
-      }, {
-        $set: {
-          categoryname,
-          categorydesc
+      .updateOne(
+        {
+          _id: id
+        },
+        {
+          $set: {
+            categoryname,
+            categorydesc
+          }
         }
-      })
+      )
       .then(() => {
         ctx.body = {
           code: 1,
           error: 0,
-          msg: "编辑分类成功"
+          msg: '编辑分类成功'
         };
       });
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "编辑分类失败",
+      msg: '编辑分类失败',
       err
     };
   }
@@ -131,13 +134,13 @@ async function delCategory(ctx) {
         ctx.body = {
           code: 1,
           error: 0,
-          msg: "删除分类成功"
+          msg: '删除分类成功'
         };
       });
   } catch (err) {
     cctx.body = {
       error: 1,
-      msg: "删除分类失败",
+      msg: '删除分类失败',
       err
     };
   }
@@ -149,20 +152,23 @@ async function delCategory(ctx) {
  */
 async function getAllCatg(ctx) {
   try {
-    let result = await categoryModel.find({}, {
-      categorydesc: 0,
-      __v: 0
-    });
+    let result = await categoryModel.find(
+      {},
+      {
+        categorydesc: 0,
+        __v: 0
+      }
+    );
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取所有分类成功",
+      msg: '获取所有分类成功',
       result
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取所有分类失败",
+      msg: '获取所有分类失败',
       err
     };
   }
@@ -176,21 +182,24 @@ async function getAllCatg(ctx) {
  */
 async function getAllCatgApplet(ctx) {
   try {
-    let result = await categoryModel.find({}, {
-      _id: 0,
-      categorydesc: 0,
-      __v: 0
-    });
+    let result = await categoryModel.find(
+      {},
+      {
+        _id: 0,
+        categorydesc: 0,
+        __v: 0
+      }
+    );
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取所有分类成功",
+      msg: '获取所有分类成功',
       result
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取所有分类失败",
+      msg: '获取所有分类失败',
       err
     };
   }
@@ -204,24 +213,26 @@ async function getAllCatgApplet(ctx) {
  */
 async function fetchAllCatg(ctx) {
   try {
-    let result = await categoryModel.aggregate([{
+    let result = await categoryModel.aggregate([
+      {
         $project: {
-          id: "$id",
-          categoryname: "$categoryname",
-          name: "",
-          link: "",
+          id: '$id',
+          categoryname: '$categoryname',
+          name: '',
+          link: '',
           _id: 0
-        },
+        }
       },
       {
         $lookup: {
-          from: "articles",
+          from: 'articles',
           let: { leftCatg: '$categoryname' },
-          pipeline: [{
+          pipeline: [
+            {
               $match: {
                 status: 1,
                 $expr: {
-                  $eq: ["$catg", "$$leftCatg"]
+                  $eq: ['$catg', '$$leftCatg']
                 }
               }
             },
@@ -234,13 +245,13 @@ async function fetchAllCatg(ctx) {
               }
             }
           ],
-          as: "catgNum"
+          as: 'catgNum'
         }
       },
       {
         //$unwind将操作数视为单个元素数组，其中数组的由对象字段的值替换。
         $unwind: {
-          path: "$catgNum",
+          path: '$catgNum',
           preserveNullAndEmptyArrays: true // 空的数组也拆分
         }
       }
@@ -248,13 +259,13 @@ async function fetchAllCatg(ctx) {
     ctx.body = {
       code: 1,
       error: 0,
-      msg: "获取所有分类成功",
+      msg: '获取所有分类成功',
       result
     };
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取所有分类失败",
+      msg: '获取所有分类失败',
       err
     };
   }
@@ -268,50 +279,57 @@ async function fetchApptCatg(ctx) {
   try {
     const data = ctx.request.body;
     const page = parseInt(data.page * 5);
-    await article.find({
-      catg: data.catg
-    }, {
-      _id: 0,
-      id: 1,
-      title: 1,
-      desc: 1,
-      banner: 1,
-      catg: 1,
-      pv: 1,
-      like: 1,
-      origin: 1,
-      comments: 1,
-      cmt_count: 1,
-      cdate: 1,
-    }, {
-      skip: page,
-      limit: 5,
-      sort: {
-        id: -1 //降序排列
-      }
-    }).where({
-      status: 1
-    }).then(result => {
-      const mapOrigin = new Map([
-        [0, '原创'],
-        [1, '转载'],
-        [2, '混合']
-      ])
-      result.forEach(elem => {
-        const getOrigin = mapOrigin.get(elem.origin);
-        Object.assign(elem._doc, { origin: getOrigin });
+    await article
+      .find(
+        {
+          catg: data.catg
+        },
+        {
+          _id: 0,
+          id: 1,
+          title: 1,
+          desc: 1,
+          banner: 1,
+          catg: 1,
+          pv: 1,
+          like: 1,
+          origin: 1,
+          comments: 1,
+          cmt_count: 1,
+          cdate: 1
+        },
+        {
+          skip: page,
+          limit: 5,
+          sort: {
+            id: -1 //降序排列
+          }
+        }
+      )
+      .where({
+        status: 1
       })
-      ctx.body = {
-        code: 1,
-        error: 0,
-        msg: "获取指定分类文章成功",
-        result
-      };
-    })
+      .then(result => {
+        const mapOrigin = new Map([
+          [0, '原创'],
+          [1, '转载'],
+          [2, '混合']
+        ]);
+        result.forEach(elem => {
+          const getOrigin = mapOrigin.get(elem.origin);
+          Object.assign(elem._doc, { origin: getOrigin });
+        });
+        ctx.body = {
+          code: 1,
+          error: 0,
+          msg: '获取指定分类文章成功',
+          result
+        };
+      });
   } catch (err) {
     ctx.body = {
       error: 1,
-      msg: "获取指定分类文章失败",
+      msg: '获取指定分类文章失败',
       err
     };
   }
